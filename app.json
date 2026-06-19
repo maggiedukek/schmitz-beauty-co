@@ -1,0 +1,12 @@
+{
+  "expo": {
+    "name": "Schmitz Beauty Co.",
+    "slug": "schmitz-beauty-co",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "web": {
+      "bundler": "metro"
+    }
+  }
+}
