@@ -1,7 +1,7 @@
-# This is a plain static website (HTML/CSS/JS) — no build step.
-# The command is intentionally a no-op so Netlify does NOT try to build the
-# old Expo app; it just publishes the repo root as-is.
+# Plain static website (HTML/CSS/JS) — no real build.
+# We copy the static files into "dist" and publish that, so it works
+# regardless of any leftover publish-directory setting from the old Expo app.
 
 [build]
-  command = "echo 'Static site — nothing to build.'"
-  publish = "."
+  command = "rm -rf dist && mkdir -p dist && cp index.html book.html styles.css script.js dist/ && cp -r images dist/"
+  publish = "dist"
