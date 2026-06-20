@@ -1,5 +1,7 @@
-# Tells Netlify how to publish the site.
-# This is now a plain static website (HTML/CSS/JS) — no build step needed.
+# This is a plain static website (HTML/CSS/JS) — no build step.
+# The command is intentionally a no-op so Netlify does NOT try to build the
+# old Expo app; it just publishes the repo root as-is.
 
 [build]
+  command = "echo 'Static site — nothing to build.'"
   publish = "."

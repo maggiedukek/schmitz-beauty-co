@@ -286,6 +286,8 @@ img {
 
 .eyebrow-red {
   color: var(--red);
+  font-size: 11px;
+  letter-spacing: 2px;
 }
 
 .accent-line {
@@ -307,8 +309,8 @@ img {
 
 .title-dark {
   font-family: var(--serif);
-  font-size: clamp(23px, 3.4vw, 32px);
-  line-height: 1.15;
+  font-size: clamp(18px, 2.2vw, 23px);
+  line-height: 1.25;
   font-weight: 400;
   color: var(--ink);
   margin-bottom: 16px;
