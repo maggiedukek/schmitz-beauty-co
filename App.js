@@ -27,6 +27,8 @@ export default function App() {
     additionalNotes: '',
   });
 
+  const [submitted, setSubmitted] = useState(false);
+
   const updateField = (field, value) => {
     setFormData((prev) => ({
       ...prev,
@@ -34,11 +36,30 @@ export default function App() {
     }));
   };
 
+  // Encodes the form fields the way Netlify Forms expects.
+  const encode = (data) =>
+    Object.keys(data)
+      .map((key) => encodeURIComponent(key) + '=' + encodeURIComponent(data[key]))
+      .join('&');
+
   const submitConsultation = () => {
-    Alert.alert(
-      'Consultation Submitted',
-      'This is where you will later connect the form to your database or backend.'
-    );
+    if (!formData.fullName || !formData.email) {
+      Alert.alert('Almost there', 'Please add at least your name and email.');
+      return;
+    }
+
+    fetch('/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: encode({ 'form-name': 'consultation', ...formData }),
+    })
+      .then(() => setSubmitted(true))
+      .catch(() => {
+        Alert.alert(
+          'Something went wrong',
+          'Please try again in a moment, or reach out directly.'
+        );
+      });
   };
 
   const renderHeader = () => (
@@ -260,6 +281,15 @@ export default function App() {
         </Text>
       </View>
 
+      {submitted ? (
+        <View style={styles.formCard}>
+          <Text style={styles.aboutTitle}>Thank you!</Text>
+          <Text style={styles.pageIntro}>
+            Your consultation request has been sent. Brenna will be in touch
+            soon to plan your appointment.
+          </Text>
+        </View>
+      ) : (
       <View style={styles.formCard}>
         <Text style={styles.inputLabel}>Full Name</Text>
         <TextInput
@@ -352,6 +382,7 @@ export default function App() {
           <Text style={styles.primaryButtonText}>Submit Consultation</Text>
         </TouchableOpacity>
       </View>
+      )}
     </ScrollView>
   );
 
