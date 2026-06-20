@@ -795,7 +795,7 @@ const styles = StyleSheet.create({
     marginBottom: 14,
   },
   aboutImageDesktop: {
-    flex: 1,
+    width: '46%',
     height: 400,
     marginBottom: 0,
   },
