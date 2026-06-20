@@ -10,10 +10,14 @@ import {
   Image,
   TextInput,
   Alert,
+  useWindowDimensions,
 } from 'react-native';
 
 export default function App() {
   const [currentScreen, setCurrentScreen] = useState('home');
+
+  const { width } = useWindowDimensions();
+  const isDesktop = width >= 900;
 
   const [formData, setFormData] = useState({
     fullName: '',
@@ -62,71 +66,105 @@ export default function App() {
       });
   };
 
+  const navItems = [
+    { key: 'home', label: 'Home' },
+    { key: 'services', label: 'Services' },
+    { key: 'portfolio', label: 'Portfolio' },
+    { key: 'account', label: 'Account' },
+  ];
+
   const renderHeader = () => (
     <View style={styles.topHeader}>
-      <Image
-        source={{ uri: 'https://i.imgur.com/WjfFLjt.png' }}
-        style={styles.headerLogo}
-        resizeMode="contain"
-      />
+      <View style={[styles.headerInner, isDesktop && styles.headerInnerDesktop]}>
+        <Image
+          source={{ uri: 'https://i.imgur.com/WjfFLjt.png' }}
+          style={styles.headerLogo}
+          resizeMode="contain"
+        />
 
-      <TouchableOpacity
-        style={styles.accountButton}
-        onPress={() => setCurrentScreen('account')}
-      >
-        <Text style={styles.accountButtonText}>Account</Text>
-      </TouchableOpacity>
+        {isDesktop && (
+          <View style={styles.navLinks}>
+            {navItems
+              .filter((item) => item.key !== 'account')
+              .map((item) => (
+                <TouchableOpacity
+                  key={item.key}
+                  style={styles.navLink}
+                  onPress={() => setCurrentScreen(item.key)}
+                >
+                  <Text
+                    style={[
+                      styles.navLinkText,
+                      currentScreen === item.key && styles.navLinkTextActive,
+                    ]}
+                  >
+                    {item.label}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+          </View>
+        )}
+
+        <TouchableOpacity
+          style={styles.accountButton}
+          onPress={() => setCurrentScreen('account')}
+        >
+          <Text style={styles.accountButtonText}>Account</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 
   const renderHomeScreen = () => (
-    <ScrollView contentContainerStyle={styles.scrollContent}>
-      <View style={styles.heroCard}>
+    <>
+      <View style={[styles.heroCard, isDesktop && styles.heroCardDesktop]}>
         <View style={styles.eyebrowRow}>
           <View style={styles.redAccentLine} />
           <Text style={styles.heroEyebrow}>CONSULTATION FIRST</Text>
         </View>
 
-        <Text style={styles.heroTitle}>
+        <Text style={[styles.heroTitle, isDesktop && styles.heroTitleDesktop]}>
           A more thoughtful beauty experience.
         </Text>
 
-        <Text style={styles.heroText}>
+        <Text style={[styles.heroText, isDesktop && styles.heroTextDesktop]}>
           Start with a consultation so service timing, hair goals, and the right
           appointment can be planned before booking.
         </Text>
 
         <TouchableOpacity
-          style={styles.primaryButton}
+          style={[styles.primaryButton, isDesktop && styles.primaryButtonDesktop]}
           onPress={() => setCurrentScreen('consult')}
         >
           <Text style={styles.primaryButtonText}>Begin Your Consultation</Text>
         </TouchableOpacity>
       </View>
 
-      <View style={styles.aboutCard}>
+      <View style={[styles.aboutCard, isDesktop && styles.aboutCardDesktop]}>
         <Image
           source={{ uri: 'https://i.imgur.com/c68mqDK.png' }}
-          style={styles.aboutImage}
+          style={[styles.aboutImage, isDesktop && styles.aboutImageDesktop]}
           resizeMode="cover"
         />
 
-        <Text style={styles.aboutTitle}>Meet Brenna</Text>
+        <View style={isDesktop && styles.aboutTextWrap}>
+          <Text style={styles.aboutTitle}>Meet Brenna</Text>
 
-        <Text style={styles.aboutText}>
-          Brenna is the owner of Schmitz Beauty Co., where bold style meets
-          elevated self-care. With a background in massage therapy and a passion
-          for vivid color and precision lash work, she brings both artistry and
-          intention to every service.
-        </Text>
+          <Text style={styles.aboutText}>
+            Brenna is the owner of Schmitz Beauty Co., where bold style meets
+            elevated self-care. With a background in massage therapy and a passion
+            for vivid color and precision lash work, she brings both artistry and
+            intention to every service.
+          </Text>
 
-        <Text style={styles.aboutText}>
-          Known for her edgy style and welcoming energy, Brenna has created a
-          space that is inclusive, expressive, and unapologetically you. From
-          nails and hair to waxing, facials, and lash extensions, she delivers
-          high-end results with a personalized experience so every client leaves
-          feeling confident, elevated, and completely themselves.
-        </Text>
+          <Text style={styles.aboutText}>
+            Known for her edgy style and welcoming energy, Brenna has created a
+            space that is inclusive, expressive, and unapologetically you. From
+            nails and hair to waxing, facials, and lash extensions, she delivers
+            high-end results with a personalized experience so every client leaves
+            feeling confident, elevated, and completely themselves.
+          </Text>
+        </View>
       </View>
 
       <View style={styles.servicesCard}>
@@ -138,142 +176,150 @@ export default function App() {
           finish.
         </Text>
 
-        <View style={styles.serviceItem}>
-          <Text style={styles.serviceName}>Vivid Color</Text>
-          <Text style={styles.serviceDescription}>
-            Bold color work, custom tones, and expressive transformations.
-          </Text>
-        </View>
+        <View style={[styles.serviceList, isDesktop && styles.serviceGrid]}>
+          <View style={[styles.serviceItem, isDesktop && styles.serviceCardDesktop]}>
+            <Text style={styles.serviceName}>Vivid Color</Text>
+            <Text style={styles.serviceDescription}>
+              Bold color work, custom tones, and expressive transformations.
+            </Text>
+          </View>
 
-        <View style={styles.serviceItem}>
-          <Text style={styles.serviceName}>Lash Extensions</Text>
-          <Text style={styles.serviceDescription}>
-            Precision lash work for a polished, elevated look.
-          </Text>
-        </View>
+          <View style={[styles.serviceItem, isDesktop && styles.serviceCardDesktop]}>
+            <Text style={styles.serviceName}>Lash Extensions</Text>
+            <Text style={styles.serviceDescription}>
+              Precision lash work for a polished, elevated look.
+            </Text>
+          </View>
 
-        <View style={styles.serviceItem}>
-          <Text style={styles.serviceName}>Nails</Text>
-          <Text style={styles.serviceDescription}>
-            Detailed nail services designed to match your style and vibe.
-          </Text>
-        </View>
+          <View style={[styles.serviceItem, isDesktop && styles.serviceCardDesktop]}>
+            <Text style={styles.serviceName}>Nails</Text>
+            <Text style={styles.serviceDescription}>
+              Detailed nail services designed to match your style and vibe.
+            </Text>
+          </View>
 
-        <View style={styles.serviceItem}>
-          <Text style={styles.serviceName}>Waxing</Text>
-          <Text style={styles.serviceDescription}>
-            Clean, smooth results in a comfortable and professional setting.
-          </Text>
-        </View>
+          <View style={[styles.serviceItem, isDesktop && styles.serviceCardDesktop]}>
+            <Text style={styles.serviceName}>Waxing</Text>
+            <Text style={styles.serviceDescription}>
+              Clean, smooth results in a comfortable and professional setting.
+            </Text>
+          </View>
 
-        <View style={styles.serviceItem}>
-          <Text style={styles.serviceName}>Facials</Text>
-          <Text style={styles.serviceDescription}>
-            Skin-focused treatments that refresh, restore, and elevate self-care.
-          </Text>
+          <View style={[styles.serviceItem, isDesktop && styles.serviceCardDesktop]}>
+            <Text style={styles.serviceName}>Facials</Text>
+            <Text style={styles.serviceDescription}>
+              Skin-focused treatments that refresh, restore, and elevate self-care.
+            </Text>
+          </View>
         </View>
 
         <TouchableOpacity
-          style={styles.secondaryButton}
+          style={[styles.secondaryButton, isDesktop && styles.inlineButtonDesktop]}
           onPress={() => setCurrentScreen('services')}
         >
           <Text style={styles.secondaryButtonText}>Explore Services</Text>
         </TouchableOpacity>
       </View>
-    </ScrollView>
+    </>
   );
 
   const renderServicesScreen = () => (
-    <ScrollView contentContainerStyle={styles.scrollContent}>
+    <>
       <View style={styles.pageHeaderCard}>
         <View style={styles.eyebrowRow}>
           <View style={styles.redAccentLine} />
           <Text style={styles.heroEyebrow}>SERVICE MENU</Text>
         </View>
 
-        <Text style={styles.pageTitle}>Services</Text>
+        <Text style={[styles.pageTitle, isDesktop && styles.pageTitleDesktop]}>
+          Services
+        </Text>
 
         <Text style={styles.pageIntro}>
           Explore the signature beauty services offered at Schmitz Beauty Co.
         </Text>
       </View>
 
-      <View style={styles.categoryCard}>
-        <Text style={styles.categoryTitle}>Hair</Text>
+      <View style={isDesktop && styles.categoryGrid}>
+        <View style={[styles.categoryCard, isDesktop && styles.categoryCardDesktop]}>
+          <Text style={styles.categoryTitle}>Hair</Text>
 
-        <View style={styles.menuItem}>
-          <Text style={styles.menuItemName}>Vivid Color</Text>
-          <Text style={styles.menuItemText}>
-            Bold color transformations, expressive tones, and custom creative work.
-          </Text>
+          <View style={styles.menuItem}>
+            <Text style={styles.menuItemName}>Vivid Color</Text>
+            <Text style={styles.menuItemText}>
+              Bold color transformations, expressive tones, and custom creative work.
+            </Text>
+          </View>
+
+          <View style={styles.menuItem}>
+            <Text style={styles.menuItemName}>Custom Color</Text>
+            <Text style={styles.menuItemText}>
+              Personalized color work tailored to your goals and maintenance needs.
+            </Text>
+          </View>
         </View>
 
-        <View style={styles.menuItem}>
-          <Text style={styles.menuItemName}>Custom Color</Text>
-          <Text style={styles.menuItemText}>
-            Personalized color work tailored to your goals and maintenance needs.
-          </Text>
-        </View>
-      </View>
+        <View style={[styles.categoryCard, isDesktop && styles.categoryCardDesktop]}>
+          <Text style={styles.categoryTitle}>Lashes</Text>
 
-      <View style={styles.categoryCard}>
-        <Text style={styles.categoryTitle}>Lashes</Text>
-
-        <View style={styles.menuItem}>
-          <Text style={styles.menuItemName}>Lash Extensions</Text>
-          <Text style={styles.menuItemText}>
-            Precision lash services designed for a polished, elevated finish.
-          </Text>
-        </View>
-      </View>
-
-      <View style={styles.categoryCard}>
-        <Text style={styles.categoryTitle}>Nails</Text>
-
-        <View style={styles.menuItem}>
-          <Text style={styles.menuItemName}>Nail Services</Text>
-          <Text style={styles.menuItemText}>
-            Detailed nail work designed to reflect your personal style.
-          </Text>
-        </View>
-      </View>
-
-      <View style={styles.categoryCard}>
-        <Text style={styles.categoryTitle}>Skin + Waxing</Text>
-
-        <View style={styles.menuItem}>
-          <Text style={styles.menuItemName}>Waxing</Text>
-          <Text style={styles.menuItemText}>
-            Clean, smooth results in a comfortable professional setting.
-          </Text>
+          <View style={styles.menuItem}>
+            <Text style={styles.menuItemName}>Lash Extensions</Text>
+            <Text style={styles.menuItemText}>
+              Precision lash services designed for a polished, elevated finish.
+            </Text>
+          </View>
         </View>
 
-        <View style={styles.menuItem}>
-          <Text style={styles.menuItemName}>Facials</Text>
-          <Text style={styles.menuItemText}>
-            Skin-focused treatments that refresh, restore, and elevate self-care.
-          </Text>
+        <View style={[styles.categoryCard, isDesktop && styles.categoryCardDesktop]}>
+          <Text style={styles.categoryTitle}>Nails</Text>
+
+          <View style={styles.menuItem}>
+            <Text style={styles.menuItemName}>Nail Services</Text>
+            <Text style={styles.menuItemText}>
+              Detailed nail work designed to reflect your personal style.
+            </Text>
+          </View>
+        </View>
+
+        <View style={[styles.categoryCard, isDesktop && styles.categoryCardDesktop]}>
+          <Text style={styles.categoryTitle}>Skin + Waxing</Text>
+
+          <View style={styles.menuItem}>
+            <Text style={styles.menuItemName}>Waxing</Text>
+            <Text style={styles.menuItemText}>
+              Clean, smooth results in a comfortable professional setting.
+            </Text>
+          </View>
+
+          <View style={styles.menuItem}>
+            <Text style={styles.menuItemName}>Facials</Text>
+            <Text style={styles.menuItemText}>
+              Skin-focused treatments that refresh, restore, and elevate self-care.
+            </Text>
+          </View>
         </View>
       </View>
 
       <TouchableOpacity
-        style={styles.secondaryButton}
+        style={[styles.secondaryButton, isDesktop && styles.inlineButtonDesktop]}
         onPress={() => setCurrentScreen('consult')}
       >
         <Text style={styles.secondaryButtonText}>Start Consultation</Text>
       </TouchableOpacity>
-    </ScrollView>
+    </>
   );
 
   const renderConsultScreen = () => (
-    <ScrollView contentContainerStyle={styles.scrollContent}>
+    <View style={isDesktop && styles.narrowColumn}>
       <View style={styles.pageHeaderCard}>
         <View style={styles.eyebrowRow}>
           <View style={styles.redAccentLine} />
           <Text style={styles.heroEyebrow}>CONSULTATION</Text>
         </View>
 
-        <Text style={styles.pageTitle}>Begin Your Consultation</Text>
+        <Text style={[styles.pageTitle, isDesktop && styles.pageTitleDesktop]}>
+          Begin Your Consultation
+        </Text>
 
         <Text style={styles.pageIntro}>
           Fill out the details below so the right service, timing, and next step
@@ -290,132 +336,132 @@ export default function App() {
           </Text>
         </View>
       ) : (
-      <View style={styles.formCard}>
-        <Text style={styles.inputLabel}>Full Name</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Enter your full name"
-          placeholderTextColor="#8A8A8A"
-          value={formData.fullName}
-          onChangeText={(text) => updateField('fullName', text)}
-        />
+        <View style={styles.formCard}>
+          <Text style={styles.inputLabel}>Full Name</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Enter your full name"
+            placeholderTextColor="#8A8A8A"
+            value={formData.fullName}
+            onChangeText={(text) => updateField('fullName', text)}
+          />
 
-        <Text style={styles.inputLabel}>Phone Number</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Enter your phone number"
-          placeholderTextColor="#8A8A8A"
-          value={formData.phone}
-          onChangeText={(text) => updateField('phone', text)}
-        />
+          <Text style={styles.inputLabel}>Phone Number</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Enter your phone number"
+            placeholderTextColor="#8A8A8A"
+            value={formData.phone}
+            onChangeText={(text) => updateField('phone', text)}
+          />
 
-        <Text style={styles.inputLabel}>Email Address</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Enter your email"
-          placeholderTextColor="#8A8A8A"
-          value={formData.email}
-          onChangeText={(text) => updateField('email', text)}
-        />
+          <Text style={styles.inputLabel}>Email Address</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Enter your email"
+            placeholderTextColor="#8A8A8A"
+            value={formData.email}
+            onChangeText={(text) => updateField('email', text)}
+          />
 
-        <Text style={styles.inputLabel}>Service You’re Interested In</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Hair, lashes, nails, waxing, facials..."
-          placeholderTextColor="#8A8A8A"
-          value={formData.interestedService}
-          onChangeText={(text) => updateField('interestedService', text)}
-        />
+          <Text style={styles.inputLabel}>Service You’re Interested In</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Hair, lashes, nails, waxing, facials..."
+            placeholderTextColor="#8A8A8A"
+            value={formData.interestedService}
+            onChangeText={(text) => updateField('interestedService', text)}
+          />
 
-        <Text style={styles.inputLabel}>Current Hair / Beauty Situation</Text>
-        <TextInput
-          style={[styles.input, styles.multilineInput]}
-          placeholder="Tell us a little about your current hair, lashes, skin, nails, or any concerns..."
-          placeholderTextColor="#8A8A8A"
-          multiline
-          value={formData.currentHairState}
-          onChangeText={(text) => updateField('currentHairState', text)}
-        />
+          <Text style={styles.inputLabel}>Current Hair / Beauty Situation</Text>
+          <TextInput
+            style={[styles.input, styles.multilineInput]}
+            placeholder="Tell us a little about your current hair, lashes, skin, nails, or any concerns..."
+            placeholderTextColor="#8A8A8A"
+            multiline
+            value={formData.currentHairState}
+            onChangeText={(text) => updateField('currentHairState', text)}
+          />
 
-        <Text style={styles.inputLabel}>What Are Your Goals?</Text>
-        <TextInput
-          style={[styles.input, styles.multilineInput]}
-          placeholder="Describe the look, result, or experience you want..."
-          placeholderTextColor="#8A8A8A"
-          multiline
-          value={formData.beautyGoals}
-          onChangeText={(text) => updateField('beautyGoals', text)}
-        />
+          <Text style={styles.inputLabel}>What Are Your Goals?</Text>
+          <TextInput
+            style={[styles.input, styles.multilineInput]}
+            placeholder="Describe the look, result, or experience you want..."
+            placeholderTextColor="#8A8A8A"
+            multiline
+            value={formData.beautyGoals}
+            onChangeText={(text) => updateField('beautyGoals', text)}
+          />
 
-        <Text style={styles.inputLabel}>Do You Have Inspiration Photos?</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Yes / No / Can send later"
-          placeholderTextColor="#8A8A8A"
-          value={formData.inspirationPhotos}
-          onChangeText={(text) => updateField('inspirationPhotos', text)}
-        />
+          <Text style={styles.inputLabel}>Do You Have Inspiration Photos?</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Yes / No / Can send later"
+            placeholderTextColor="#8A8A8A"
+            value={formData.inspirationPhotos}
+            onChangeText={(text) => updateField('inspirationPhotos', text)}
+          />
 
-        <Text style={styles.inputLabel}>Preferred Days or Times</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Weekdays, evenings, flexible, etc."
-          placeholderTextColor="#8A8A8A"
-          value={formData.preferredDays}
-          onChangeText={(text) => updateField('preferredDays', text)}
-        />
+          <Text style={styles.inputLabel}>Preferred Days or Times</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Weekdays, evenings, flexible, etc."
+            placeholderTextColor="#8A8A8A"
+            value={formData.preferredDays}
+            onChangeText={(text) => updateField('preferredDays', text)}
+          />
 
-        <Text style={styles.inputLabel}>Anything Else Brenna Should Know?</Text>
-        <TextInput
-          style={[styles.input, styles.multilineInput]}
-          placeholder="Add anything important here..."
-          placeholderTextColor="#8A8A8A"
-          multiline
-          value={formData.additionalNotes}
-          onChangeText={(text) => updateField('additionalNotes', text)}
-        />
+          <Text style={styles.inputLabel}>Anything Else Brenna Should Know?</Text>
+          <TextInput
+            style={[styles.input, styles.multilineInput]}
+            placeholder="Add anything important here..."
+            placeholderTextColor="#8A8A8A"
+            multiline
+            value={formData.additionalNotes}
+            onChangeText={(text) => updateField('additionalNotes', text)}
+          />
 
-        <TouchableOpacity
-          style={styles.primaryButton}
-          onPress={submitConsultation}
-        >
-          <Text style={styles.primaryButtonText}>Submit Consultation</Text>
-        </TouchableOpacity>
-      </View>
+          <TouchableOpacity
+            style={styles.primaryButton}
+            onPress={submitConsultation}
+          >
+            <Text style={styles.primaryButtonText}>Submit Consultation</Text>
+          </TouchableOpacity>
+        </View>
       )}
-    </ScrollView>
+    </View>
   );
 
   const renderPortfolioScreen = () => (
-    <ScrollView contentContainerStyle={styles.scrollContent}>
-      <View style={styles.pageHeaderCard}>
-        <View style={styles.eyebrowRow}>
-          <View style={styles.redAccentLine} />
-          <Text style={styles.heroEyebrow}>PORTFOLIO</Text>
-        </View>
-
-        <Text style={styles.pageTitle}>Portfolio</Text>
-        <Text style={styles.pageIntro}>
-          This page can later show featured work, transformations, and finished results.
-        </Text>
+    <View style={styles.pageHeaderCard}>
+      <View style={styles.eyebrowRow}>
+        <View style={styles.redAccentLine} />
+        <Text style={styles.heroEyebrow}>PORTFOLIO</Text>
       </View>
-    </ScrollView>
+
+      <Text style={[styles.pageTitle, isDesktop && styles.pageTitleDesktop]}>
+        Portfolio
+      </Text>
+      <Text style={styles.pageIntro}>
+        This page can later show featured work, transformations, and finished results.
+      </Text>
+    </View>
   );
 
   const renderAccountScreen = () => (
-    <ScrollView contentContainerStyle={styles.scrollContent}>
-      <View style={styles.pageHeaderCard}>
-        <View style={styles.eyebrowRow}>
-          <View style={styles.redAccentLine} />
-          <Text style={styles.heroEyebrow}>ACCOUNT</Text>
-        </View>
-
-        <Text style={styles.pageTitle}>Account</Text>
-        <Text style={styles.pageIntro}>
-          This page can later hold client login, stylist login, and saved account details.
-        </Text>
+    <View style={styles.pageHeaderCard}>
+      <View style={styles.eyebrowRow}>
+        <View style={styles.redAccentLine} />
+        <Text style={styles.heroEyebrow}>ACCOUNT</Text>
       </View>
-    </ScrollView>
+
+      <Text style={[styles.pageTitle, isDesktop && styles.pageTitleDesktop]}>
+        Account
+      </Text>
+      <Text style={styles.pageIntro}>
+        This page can later hold client login, stylist login, and saved account details.
+      </Text>
+    </View>
   );
 
   const renderCurrentScreen = () => {
@@ -442,69 +488,39 @@ export default function App() {
       >
         <View style={styles.overlay}>
           {renderHeader()}
-          {renderCurrentScreen()}
 
-          <View style={styles.bottomNav}>
-            <TouchableOpacity
-              style={styles.navItem}
-              onPress={() => setCurrentScreen('home')}
-            >
-              <Text
-                style={[
-                  styles.navText,
-                  currentScreen === 'home' && styles.navTextActive,
-                ]}
-              >
-                Home
-              </Text>
-              {currentScreen === 'home' && <View style={styles.activeUnderline} />}
-            </TouchableOpacity>
+          <ScrollView
+            contentContainerStyle={[
+              styles.scrollContent,
+              isDesktop && styles.scrollContentDesktop,
+            ]}
+          >
+            <View style={[styles.contentWrap, isDesktop && styles.contentWrapDesktop]}>
+              {renderCurrentScreen()}
+            </View>
+          </ScrollView>
 
-            <TouchableOpacity
-              style={styles.navItem}
-              onPress={() => setCurrentScreen('services')}
-            >
-              <Text
-                style={[
-                  styles.navText,
-                  currentScreen === 'services' && styles.navTextActive,
-                ]}
-              >
-                Services
-              </Text>
-              {currentScreen === 'services' && <View style={styles.activeUnderline} />}
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              style={styles.navItem}
-              onPress={() => setCurrentScreen('portfolio')}
-            >
-              <Text
-                style={[
-                  styles.navText,
-                  currentScreen === 'portfolio' && styles.navTextActive,
-                ]}
-              >
-                Portfolio
-              </Text>
-              {currentScreen === 'portfolio' && <View style={styles.activeUnderline} />}
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              style={styles.navItem}
-              onPress={() => setCurrentScreen('account')}
-            >
-              <Text
-                style={[
-                  styles.navText,
-                  currentScreen === 'account' && styles.navTextActive,
-                ]}
-              >
-                Account
-              </Text>
-              {currentScreen === 'account' && <View style={styles.activeUnderline} />}
-            </TouchableOpacity>
-          </View>
+          {!isDesktop && (
+            <View style={styles.bottomNav}>
+              {navItems.map((item) => (
+                <TouchableOpacity
+                  key={item.key}
+                  style={styles.navItem}
+                  onPress={() => setCurrentScreen(item.key)}
+                >
+                  <Text
+                    style={[
+                      styles.navText,
+                      currentScreen === item.key && styles.navTextActive,
+                    ]}
+                  >
+                    {item.label}
+                  </Text>
+                  {currentScreen === item.key && <View style={styles.activeUnderline} />}
+                </TouchableOpacity>
+              ))}
+            </View>
+          )}
         </View>
       </ImageBackground>
     </SafeAreaView>
@@ -528,18 +544,44 @@ const styles = StyleSheet.create({
   },
 
   topHeader: {
+    backgroundColor: '#FFFFFF',
+    borderBottomWidth: 1,
+    borderBottomColor: 'rgba(10,186,181,0.22)',
+  },
+  headerInner: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: 18,
     paddingVertical: 14,
-    backgroundColor: '#FFFFFF',
-    borderBottomWidth: 1,
-    borderBottomColor: 'rgba(10,186,181,0.22)',
+    width: '100%',
+  },
+  headerInnerDesktop: {
+    maxWidth: 1100,
+    alignSelf: 'center',
+    paddingHorizontal: 40,
+    paddingVertical: 18,
   },
   headerLogo: {
     width: 150,
     height: 60,
+  },
+  navLinks: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 32,
+  },
+  navLink: {
+    paddingVertical: 6,
+  },
+  navLinkText: {
+    color: '#444444',
+    fontSize: 15,
+    fontWeight: '600',
+  },
+  navLinkTextActive: {
+    color: '#0ABAB5',
+    fontWeight: '700',
   },
   accountButton: {
     backgroundColor: '#0ABAB5',
@@ -560,6 +602,23 @@ const styles = StyleSheet.create({
     paddingTop: 18,
     paddingBottom: 96,
   },
+  scrollContentDesktop: {
+    paddingHorizontal: 40,
+    paddingTop: 40,
+    paddingBottom: 60,
+    alignItems: 'center',
+  },
+  contentWrap: {
+    width: '100%',
+  },
+  contentWrapDesktop: {
+    maxWidth: 1100,
+  },
+  narrowColumn: {
+    width: '100%',
+    maxWidth: 760,
+    alignSelf: 'center',
+  },
 
   heroCard: {
     backgroundColor: 'rgba(0,0,0,0.84)',
@@ -574,6 +633,10 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 8 },
     elevation: 12,
   },
+  heroCardDesktop: {
+    padding: 64,
+    marginBottom: 28,
+  },
   aboutCard: {
     backgroundColor: 'rgba(0,0,0,0.82)',
     borderRadius: 22,
@@ -586,6 +649,16 @@ const styles = StyleSheet.create({
     shadowRadius: 12,
     shadowOffset: { width: 0, height: 8 },
     elevation: 10,
+  },
+  aboutCardDesktop: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 32,
+    padding: 32,
+    marginBottom: 28,
+  },
+  aboutTextWrap: {
+    flex: 1,
   },
   servicesCard: {
     backgroundColor: 'rgba(0,0,0,0.82)',
@@ -612,6 +685,11 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 8 },
     elevation: 10,
   },
+  categoryGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 18,
+  },
   categoryCard: {
     backgroundColor: 'rgba(0,0,0,0.82)',
     borderRadius: 22,
@@ -624,6 +702,11 @@ const styles = StyleSheet.create({
     shadowRadius: 12,
     shadowOffset: { width: 0, height: 8 },
     elevation: 10,
+  },
+  categoryCardDesktop: {
+    flexBasis: '47%',
+    flexGrow: 1,
+    marginBottom: 0,
   },
   formCard: {
     backgroundColor: 'rgba(0,0,0,0.84)',
@@ -665,11 +748,21 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     marginBottom: 14,
   },
+  heroTitleDesktop: {
+    fontSize: 46,
+    lineHeight: 54,
+    maxWidth: 720,
+  },
   heroText: {
     color: '#F0F0F0',
     marginBottom: 24,
     lineHeight: 25,
     fontSize: 16,
+  },
+  heroTextDesktop: {
+    fontSize: 19,
+    lineHeight: 30,
+    maxWidth: 620,
   },
 
   primaryButton: {
@@ -685,6 +778,10 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 4 },
     elevation: 4,
   },
+  primaryButtonDesktop: {
+    alignSelf: 'flex-start',
+    paddingHorizontal: 48,
+  },
   primaryButtonText: {
     color: '#000000',
     fontWeight: '700',
@@ -696,6 +793,11 @@ const styles = StyleSheet.create({
     height: 220,
     borderRadius: 18,
     marginBottom: 14,
+  },
+  aboutImageDesktop: {
+    flex: 1,
+    height: 400,
+    marginBottom: 0,
   },
   aboutTitle: {
     color: '#FFFFFF',
@@ -727,10 +829,28 @@ const styles = StyleSheet.create({
     marginBottom: 18,
   },
 
+  serviceList: {
+    width: '100%',
+  },
+  serviceGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 16,
+  },
   serviceItem: {
     paddingVertical: 12,
     borderTopWidth: 1,
     borderTopColor: 'rgba(255,255,255,0.08)',
+  },
+  serviceCardDesktop: {
+    flexBasis: '30%',
+    flexGrow: 1,
+    minWidth: 220,
+    borderTopWidth: 0,
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.12)',
+    borderRadius: 14,
+    padding: 18,
   },
   serviceName: {
     color: '#0ABAB5',
@@ -749,9 +869,13 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
     borderRadius: 16,
     paddingVertical: 14,
+    paddingHorizontal: 24,
     alignItems: 'center',
     borderWidth: 1,
     borderColor: 'rgba(179,38,30,0.82)',
+  },
+  inlineButtonDesktop: {
+    alignSelf: 'flex-start',
   },
   secondaryButtonText: {
     color: '#FFFFFF',
@@ -766,6 +890,10 @@ const styles = StyleSheet.create({
     fontFamily: 'Georgia',
     fontWeight: '700',
     marginBottom: 10,
+  },
+  pageTitleDesktop: {
+    fontSize: 40,
+    lineHeight: 48,
   },
   pageIntro: {
     color: '#EAEAEA',
