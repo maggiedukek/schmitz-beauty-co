@@ -1,15 +1,5 @@
-# Tells Netlify how to build and publish the site automatically.
-# Every time you push a change to GitHub, Netlify runs this build.
+# Tells Netlify how to publish the site.
+# This is now a plain static website (HTML/CSS/JS) — no build step needed.
 
 [build]
-  command = "npx expo export --platform web"
-  publish = "dist"
-
-[build.environment]
-  NODE_VERSION = "20"
-
-# Makes navigation work correctly for a single-page app.
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
+  publish = "."

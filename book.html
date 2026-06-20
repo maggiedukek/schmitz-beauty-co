@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Book a Consultation — Schmitz Beauty Co.</title>
+  <meta
+    name="description"
+    content="Request a consultation with Brenna at Schmitz Beauty Co. — share your goals, hair/beauty situation, and preferred times to plan your visit."
+  />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Inter:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- ============================= Header ============================= -->
+  <header class="site-header" id="top">
+    <div class="header-inner">
+      <a href="index.html" class="logo-link" aria-label="Schmitz Beauty Co. home">
+        <img
+          src="https://i.imgur.com/WjfFLjt.png"
+          alt="Schmitz Beauty Co."
+          class="logo"
+        />
+      </a>
+
+      <nav class="nav-desktop" aria-label="Primary">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="index.html#about" class="nav-link">About</a>
+        <a href="index.html#services" class="nav-link">Services</a>
+        <a href="book.html" class="btn btn-cta">Book Consultation</a>
+      </nav>
+
+      <div class="nav-mobile-actions">
+        <a href="index.html" class="btn btn-cta btn-cta-sm">Home</a>
+        <button
+          class="menu-toggle"
+          id="menuToggle"
+          aria-label="Open menu"
+          aria-expanded="false"
+        >
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+
+    <nav class="nav-mobile" id="mobileMenu" aria-label="Mobile">
+      <a href="index.html" class="mobile-link">Home</a>
+      <a href="index.html#about" class="mobile-link">About</a>
+      <a href="index.html#services" class="mobile-link">Services</a>
+      <a href="book.html" class="mobile-link">Book a Consultation</a>
+    </nav>
+  </header>
+
+  <main>
+    <!-- ============================= Booking / Consultation ============================= -->
+    <section class="band band-alt">
+      <div class="section-inner narrow">
+        <p class="eyebrow eyebrow-teal">
+          <span class="accent-line"></span>CONSULTATION
+        </p>
+        <h1 class="title-light">Begin Your Consultation</h1>
+        <p class="band-intro">
+          Fill out the details below so the right service, timing, and next step
+          can be planned with intention. Brenna will follow up to plan your visit.
+        </p>
+
+        <form
+          name="consultation"
+          method="POST"
+          data-netlify="true"
+          netlify-honeypot="bot-field"
+          class="form-card"
+          id="consultForm"
+        >
+          <input type="hidden" name="form-name" value="consultation" />
+          <p class="hidden-field">
+            <label>Don’t fill this out: <input name="bot-field" /></label>
+          </p>
+
+          <div class="field">
+            <label for="fullName">Full Name</label>
+            <input id="fullName" name="fullName" type="text" placeholder="Enter your full name" required />
+          </div>
+
+          <div class="field">
+            <label for="phone">Phone Number</label>
+            <input id="phone" name="phone" type="tel" placeholder="Enter your phone number" />
+          </div>
+
+          <div class="field">
+            <label for="email">Email Address</label>
+            <input id="email" name="email" type="email" placeholder="Enter your email" required />
+          </div>
+
+          <div class="field">
+            <label for="interestedService">Service You’re Interested In</label>
+            <input id="interestedService" name="interestedService" type="text" placeholder="Hair, lashes, nails, waxing, facials..." />
+          </div>
+
+          <div class="field">
+            <label for="currentHairState">Current Hair / Beauty Situation</label>
+            <textarea id="currentHairState" name="currentHairState" placeholder="Tell Brenna a little about your current hair, lashes, skin, nails, or any concerns..."></textarea>
+          </div>
+
+          <div class="field">
+            <label for="beautyGoals">What Are Your Goals?</label>
+            <textarea id="beautyGoals" name="beautyGoals" placeholder="Describe the look, result, or experience you want..."></textarea>
+          </div>
+
+          <div class="field">
+            <label for="inspirationPhotos">Do You Have Inspiration Photos?</label>
+            <input id="inspirationPhotos" name="inspirationPhotos" type="text" placeholder="Yes / No / Can send later" />
+          </div>
+
+          <div class="field">
+            <label for="preferredDays">Preferred Days or Times</label>
+            <input id="preferredDays" name="preferredDays" type="text" placeholder="Weekdays, evenings, flexible, etc." />
+          </div>
+
+          <div class="field">
+            <label for="additionalNotes">Anything Else Brenna Should Know?</label>
+            <textarea id="additionalNotes" name="additionalNotes" placeholder="Add anything important here..."></textarea>
+          </div>
+
+          <button type="submit" class="btn btn-primary form-submit">Submit Consultation</button>
+        </form>
+
+        <div class="form-card form-success" id="formSuccess" hidden>
+          <h3 class="thank-you">Thank you!</h3>
+          <p class="band-intro">
+            Your consultation request has been sent. Brenna will be in touch
+            soon to plan your appointment.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================= Follow on Facebook ============================= -->
+    <section class="band fb-band">
+      <div class="section-inner fb-inner">
+        <h2 class="fb-title">Follow Schmitz Beauty Co. on Facebook</h2>
+        <p class="fb-text">
+          See the latest color, lash, and beauty work from Schmitz Beauty Co. —
+          plus openings, updates, and inspiration.
+        </p>
+        <a
+          href="https://www.facebook.com/profile.php?id=100087584095984"
+          target="_blank"
+          rel="noopener"
+          class="btn btn-fb"
+        >
+          <svg class="fb-icon" viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M22 12.06C22 6.5 17.52 2 12 2S2 6.5 2 12.06c0 5.02 3.66 9.18 8.44 9.94v-7.03H7.9v-2.9h2.54V9.85c0-2.51 1.49-3.9 3.78-3.9 1.09 0 2.24.2 2.24.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56v1.88h2.78l-.44 2.9h-2.34V22c4.78-.76 8.44-4.92 8.44-9.94z"/></svg>
+          Follow on Facebook
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============================= Footer ============================= -->
+  <footer class="footer">
+    <div class="section-inner footer-grid">
+      <div class="footer-brand">
+        <p class="footer-name">Schmitz Beauty Co.</p>
+        <p class="footer-tagline">
+          Bold style, elevated self-care, and a more thoughtful beauty
+          experience — by Brenna.
+        </p>
+      </div>
+
+      <div class="footer-col">
+        <p class="footer-heading">Explore</p>
+        <a href="index.html">Home</a>
+        <a href="index.html#about">About</a>
+        <a href="index.html#services">Services</a>
+        <a href="book.html">Book a Consultation</a>
+      </div>
+
+      <div class="footer-col">
+        <p class="footer-heading">Services</p>
+        <span>Vivid &amp; Custom Color</span>
+        <span>Lash Extensions</span>
+        <span>Nails</span>
+        <span>Waxing &amp; Facials</span>
+        <span>Massage</span>
+      </div>
+
+      <div class="footer-col">
+        <p class="footer-heading">Get in Touch</p>
+        <span>Simplicity Salon</span>
+        <span>Staples, Minnesota</span>
+        <a href="https://www.facebook.com/profile.php?id=100087584095984" target="_blank" rel="noopener">Follow on Facebook</a>
+        <a href="book.html" class="btn btn-cta footer-cta">Book Consultation</a>
+      </div>
+    </div>
+
+    <div class="footer-bar">
+      <p>&copy; <span id="year"></span> Schmitz Beauty Co. All rights reserved.</p>
+      <p class="footer-credit">
+        Managed by
+        <a href="https://maggiedukek.com" target="_blank" rel="noopener">Maggiedukek.com</a>
+      </p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
