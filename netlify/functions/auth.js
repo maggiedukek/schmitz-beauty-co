@@ -1,11 +1,12 @@
 // Netlify serverless function — dashboard login + password reset.
 //
-// The dashboard password is stored *hashed* in the Baserow "Settings" table, so
-// Brenna can change it herself. On her very first login she's handed a temporary
-// password (MustReset = "yes"), and the dashboard forces her to choose her own.
+// Passwords are stored *hashed* in the Baserow "Settings" table — one row per
+// person who can log in (e.g. "owner" = Maggie, "dashboard" = Brenna). Each row
+// has its own MustReset flag, so Brenna can be forced to choose a password on her
+// first login while the owner login skips that.
 //
-//   POST { action: "login", password }                 → { ok, mustReset }
-//   POST { action: "set-password", password, newPassword } → { ok }
+//   POST { action: "login", password }                     → { ok, mustReset }
+//   POST { action: "set-password", password, newPassword }  → { ok }
 //
 // Required environment variable:
 //   BASEROW_TOKEN             — Baserow database token (keep secret)
@@ -18,15 +19,23 @@ const SETTINGS_TABLE = process.env.BASEROW_SETTINGS_TABLE_ID || "1041494";
 
 const sha256 = (s) => crypto.createHash("sha256").update(String(s)).digest("hex");
 
-async function getSettings(token) {
+async function getRows(token) {
   const res = await fetch(
     `${API}/database/rows/table/${SETTINGS_TABLE}/?user_field_names=true`,
     { headers: { Authorization: `Token ${token}` } }
   );
-  if (!res.ok) return null;
+  if (!res.ok) return [];
   const data = await res.json();
-  const rows = data.results || [];
-  return rows.find((r) => r.Name === "dashboard") || rows[0] || null;
+  return data.results || [];
+}
+
+// Find the credential row whose stored hash matches the supplied password.
+function findMatch(rows, password) {
+  return (
+    rows.find(
+      (r) => r.PasswordHash && sha256((r.Salt || "") + (password || "")) === r.PasswordHash
+    ) || null
+  );
 }
 
 exports.handler = async (event) => {
@@ -43,24 +52,21 @@ exports.handler = async (event) => {
   let body = {};
   try { body = JSON.parse(event.body || "{}"); } catch (e) {}
 
-  const settings = await getSettings(token);
-  if (!settings) return json(500, { error: "Dashboard not set up yet." });
+  const rows = await getRows(token);
+  if (!rows.length) return json(500, { error: "Dashboard not set up yet." });
 
-  // Does the supplied current password match the stored hash?
-  const matches =
-    !!settings.PasswordHash &&
-    sha256((settings.Salt || "") + (body.password || "")) === settings.PasswordHash;
+  const match = findMatch(rows, body.password);
 
   if (body.action === "login") {
-    if (!matches) return json(401, { error: "Incorrect password." });
+    if (!match) return json(401, { error: "Incorrect password." });
     return json(200, {
       ok: true,
-      mustReset: String(settings.MustReset || "").toLowerCase() === "yes",
+      mustReset: String(match.MustReset || "").toLowerCase() === "yes",
     });
   }
 
   if (body.action === "set-password") {
-    if (!matches) return json(401, { error: "Current password is incorrect." });
+    if (!match) return json(401, { error: "Current password is incorrect." });
     const np = String(body.newPassword || "");
     if (np.length < 6) {
       return json(400, { error: "New password must be at least 6 characters." });
@@ -68,7 +74,7 @@ exports.handler = async (event) => {
     const salt = crypto.randomBytes(16).toString("hex");
     const hash = sha256(salt + np);
     const res = await fetch(
-      `${API}/database/rows/table/${SETTINGS_TABLE}/${settings.id}/?user_field_names=true`,
+      `${API}/database/rows/table/${SETTINGS_TABLE}/${match.id}/?user_field_names=true`,
       {
         method: "PATCH",
         headers: { Authorization: `Token ${token}`, "Content-Type": "application/json" },

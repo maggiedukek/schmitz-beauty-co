@@ -21,7 +21,8 @@ const SETTINGS_TABLE = process.env.BASEROW_SETTINGS_TABLE_ID || "1041494";
 
 const sha256 = (s) => crypto.createHash("sha256").update(String(s)).digest("hex");
 
-// Verify a password against the hash stored in the Baserow "Settings" table.
+// Verify a password against any login row stored in the Baserow "Settings"
+// table (owner = Maggie, dashboard = Brenna, etc.).
 async function verifyPassword(token, password) {
   const res = await fetch(
     `${API}/database/rows/table/${SETTINGS_TABLE}/?user_field_names=true`,
@@ -30,9 +31,9 @@ async function verifyPassword(token, password) {
   if (!res.ok) return false;
   const data = await res.json();
   const rows = data.results || [];
-  const s = rows.find((r) => r.Name === "dashboard") || rows[0];
-  if (!s || !s.PasswordHash) return false;
-  return sha256((s.Salt || "") + (password || "")) === s.PasswordHash;
+  return rows.some(
+    (r) => r.PasswordHash && sha256((r.Salt || "") + (password || "")) === r.PasswordHash
+  );
 }
 
 // Map Baserow field names (with spaces) <-> the keys the dashboard uses.
