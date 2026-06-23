@@ -37,6 +37,59 @@ appear. The page is marked `noindex`, so search engines won't list it — but
 Brenna sets it from the dropdown on each card, and the chips at the top filter by status
 (plus a "New / Unhandled" counter). Statuses save to Baserow instantly and sync everywhere.
 
+## Receipts & expenses (the "Receipts" tab)
+
+The dashboard's **Receipts** tab lets Brenna log business expenses and attach a photo of
+each paper receipt (for taxes / write-offs). It's powered by `netlify/functions/expenses.js`
+and the **`Expenses`** table in Baserow.
+
+To turn it on, add one more environment variable:
+
+| Variable | What to put |
+|---|---|
+| `BASEROW_EXPENSES_TABLE_ID` | The ID of the **Expenses** table in Baserow (open the table; the number is in the URL). |
+
+The `Expenses` table needs these fields (exact names — the function maps to them):
+
+| Field | Type |
+|---|---|
+| `Vendor` | Single line text |
+| `Amount` | Number (2 decimal places) |
+| `Date` | Date |
+| `Category` | Single line text |
+| `Notes` | Long text |
+| `Receipt` | File |
+| `Created` | Created on (auto) |
+
+When Brenna adds a receipt with a photo, the function uploads the image to Baserow's file
+storage and attaches it to the new row, so the receipt photo is saved with the expense.
+She can also see/edit everything directly in Baserow.
+
+## Inventory (the "Inventory" tab)
+
+The **Inventory** tab tracks supplies on hand. Each item has a quantity with `+`/`−`
+buttons, and a **reorder point** — when the quantity drops to or below it, the item turns
+red and shows a **LOW** badge (with a "Low Stock" count in the stats). It's powered by
+`netlify/functions/supplies.js` and the **`Supplies`** table in Baserow.
+
+Add one more environment variable:
+
+| Variable | What to put |
+|---|---|
+| `BASEROW_SUPPLIES_TABLE_ID` | The ID of the **Supplies** table in Baserow. |
+
+The `Supplies` table needs these fields (exact names):
+
+| Field | Type |
+|---|---|
+| `Item` | Single line text |
+| `Category` | Single line text |
+| `Quantity` | Number (whole number) |
+| `Reorder At` | Number (whole number) |
+| `Unit` | Single line text |
+| `Notes` | Long text |
+| `Created` | Created on (auto) |
+
 ---
 
 # Schmitz Beauty Co. — Setup Guide

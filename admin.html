@@ -15,17 +15,36 @@
   <link rel="stylesheet" href="styles.css" />
   <style>
     /* -------- Dashboard-only styles -------- */
+    /* Bees backdrop — the same textured image used in the main site header,
+       behind a dark wash so the cards and white text stay readable. */
+    body {
+      background:
+        linear-gradient(rgba(255, 255, 255, 0.62), rgba(255, 255, 255, 0.62)),
+        url("https://i.imgur.com/E5xYmC9.png") center / cover no-repeat fixed,
+        var(--cream);
+    }
+
     .dash-wrap { max-width: 1100px; margin: 0 auto; padding: 32px 20px 80px; }
     .dash-head {
       display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
       gap: 16px; margin-bottom: 28px;
     }
-    .dash-head h1 { font-family: var(--serif); font-size: clamp(28px, 4vw, 42px); color: #fff; }
-    .dash-head p { color: var(--muted); margin-top: 4px; }
+    .dash-head h1 {
+      font-family: var(--serif); font-size: clamp(28px, 4vw, 42px); color: var(--ink);
+    }
+    /* Red accent underline beneath each section title */
+    .dash-head h1::after {
+      content: ""; display: block; width: 54px; height: 4px;
+      background: var(--red); border-radius: 2px; margin-top: 10px;
+    }
+    .dash-head p { color: var(--muted-dark); margin-top: 4px; }
+    .dash-head-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+    .dash-head-actions .btn { margin-top: 0; padding: 11px 18px; font-size: 13px; box-shadow: none; }
 
     .dash-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 14px; margin-bottom: 28px; }
     .stat-card {
       background: var(--dark-alt); border: 1px solid rgba(255,255,255,0.08);
+      border-top: 3px solid var(--red);
       border-radius: var(--radius); padding: 18px 20px;
     }
     .stat-card .num { font-family: var(--serif); font-size: 32px; color: var(--teal); line-height: 1.1; }
@@ -59,8 +78,8 @@
       border-radius: 999px; padding: 2px 12px; font-size: 13px; font-weight: 600;
     }
 
-    .dash-state { text-align: center; color: var(--muted); padding: 60px 20px; }
-    .dash-state h3 { font-family: var(--serif); color: #fff; font-size: 24px; margin-bottom: 8px; }
+    .dash-state { text-align: center; color: var(--muted-dark); padding: 60px 20px; }
+    .dash-state h3 { font-family: var(--serif); color: var(--ink); font-size: 24px; margin-bottom: 8px; }
 
     .preview-banner {
       background: rgba(227,160,8,0.14); border: 1px solid rgba(227,160,8,0.5);
@@ -89,6 +108,100 @@
     .booking-card[data-status="contacted"] .status-dot { background: #e3a008; }
     .booking-card[data-status="booked"]    .status-dot { background: #2bb673; }
     .booking-card[data-status="closed"]    .status-dot { background: #6b6b75; }
+
+    /* Brand header */
+    .dash-brand {
+      display: flex; align-items: center; gap: 14px; justify-content: space-between;
+      margin-bottom: 22px; padding-bottom: 16px; border-bottom: 3px solid var(--red);
+    }
+    .dash-logo { height: 54px; width: auto; }
+    .dash-brand .btn { margin-top: 0; padding: 9px 18px; font-size: 13px; box-shadow: none; }
+
+    /* Tabs + top bar */
+    .dash-topbar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 24px; }
+    .dash-tabs { display: flex; gap: 8px; }
+    .tab {
+      background: var(--dark-alt); border: 1px solid rgba(255,255,255,0.12); color: var(--muted);
+      font: inherit; font-size: 13px; font-weight: 700; padding: 9px 18px; border-radius: 999px; cursor: pointer;
+    }
+    .tab.is-active { background: var(--teal); border-color: var(--teal); color: #04302f; }
+    .dash-actions { display: flex; gap: 8px; }
+    /* Keep the toolbar buttons compact + aligned with the tabs (override the
+       large site button sizing so all four controls fit on one row). */
+    .dash-topbar .btn {
+      margin-top: 0; padding: 9px 18px; font-size: 13px; font-weight: 700;
+      letter-spacing: 0; box-shadow: none; white-space: nowrap;
+    }
+    .dash-topbar { flex-wrap: nowrap; }
+    @media (max-width: 560px) { .dash-topbar { flex-wrap: wrap; } }
+
+    /* Receipts: add form */
+    .receipt-form { background: var(--dark-alt); border: 1px solid rgba(255,255,255,0.1); border-radius: var(--radius); padding: 20px; margin-bottom: 24px; }
+    .receipt-form-grid { display: grid; grid-template-columns: 210px 1fr; gap: 20px; }
+    @media (max-width: 640px) { .receipt-form-grid { grid-template-columns: 1fr; } }
+    .rf-label { display: block; font-size: 11px; text-transform: uppercase; letter-spacing: .05em; color: #7c7c85; margin-bottom: 8px; }
+    .rf-photo input[type=file] { display: block; width: 100%; color: var(--muted); font: inherit; font-size: 13px; }
+    .rf-photo-hint { display: block; color: #7c7c85; font-size: 12px; margin-top: 8px; }
+    .rf-preview { margin-top: 12px; width: 100%; max-height: 220px; object-fit: cover; border-radius: 12px; border: 1px solid rgba(255,255,255,0.12); }
+    .rf-fields .field { margin-bottom: 14px; }
+    .rf-fields label { display: block; font-size: 13px; color: var(--muted); margin-bottom: 6px; }
+    .rf-fields input, .rf-fields select, .rf-fields textarea {
+      width: 100%; padding: 11px 13px; border-radius: 10px; font: inherit;
+      border: 1px solid rgba(255,255,255,0.14); background: var(--dark); color: #fff;
+    }
+    .rf-fields textarea { min-height: 64px; resize: vertical; }
+    .rf-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .rf-actions { display: flex; align-items: center; gap: 12px; justify-content: flex-end; margin-top: 8px; }
+    .rf-err { color: #ff6b6b; font-size: 13px; margin-right: auto; }
+
+    /* Receipts: expense cards */
+    .expense-list { display: flex; flex-direction: column; gap: 14px; }
+    .expense-card {
+      display: flex; gap: 16px; align-items: flex-start;
+      background: var(--dark-alt); border: 1px solid rgba(255,255,255,0.08);
+      border-left: 4px solid var(--teal); border-radius: var(--radius); padding: 16px 18px;
+    }
+    .expense-thumb {
+      width: 72px; height: 72px; flex: 0 0 auto; border-radius: 10px; object-fit: cover;
+      background: var(--dark); border: 1px solid rgba(255,255,255,0.12); cursor: pointer;
+    }
+    .expense-thumb.placeholder { display: flex; align-items: center; justify-content: center; color: #5a5a63; font-size: 26px; cursor: default; }
+    .expense-main { flex: 1; min-width: 0; }
+    .expense-top { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 6px; align-items: baseline; }
+    .expense-vendor { font-size: 17px; font-weight: 700; color: #fff; }
+    .expense-amount { font-family: var(--serif); font-size: 22px; color: var(--teal); white-space: nowrap; }
+    .expense-meta { color: var(--muted); font-size: 13px; margin: 2px 0 8px; display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+    .cat-tag { display: inline-block; background: rgba(10,186,181,0.15); color: var(--teal); border-radius: 999px; padding: 2px 12px; font-size: 12px; font-weight: 600; }
+    .expense-notes { color: #e8e8ea; font-size: 14px; white-space: pre-wrap; }
+
+    /* Inventory items */
+    .inv-list { display: flex; flex-direction: column; gap: 12px; }
+    .inv-card {
+      display: flex; gap: 16px; align-items: center; justify-content: space-between;
+      background: var(--dark-alt); border: 1px solid rgba(255,255,255,0.08);
+      border-left: 4px solid #2bb673; border-radius: var(--radius); padding: 14px 18px;
+    }
+    .inv-card[data-low="true"] { border-left-color: var(--red); }
+    .inv-main { min-width: 0; }
+    .inv-top { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .inv-name { font-size: 16px; font-weight: 700; color: #fff; }
+    .inv-low-badge {
+      display: none; background: rgba(179,38,30,0.18); color: #ff8b84;
+      border: 1px solid rgba(179,38,30,0.55); border-radius: 999px; padding: 2px 10px;
+      font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em;
+    }
+    .inv-card[data-low="true"] .inv-low-badge { display: inline-block; }
+    .inv-sub { color: var(--muted); font-size: 12px; margin-top: 3px; }
+    .inv-notes { color: #cfcfd4; font-size: 13px; margin-top: 4px; white-space: pre-wrap; }
+    .inv-qty { display: flex; align-items: center; gap: 10px; flex: 0 0 auto; }
+    .qty-btn {
+      width: 34px; height: 34px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.2);
+      background: var(--dark); color: #fff; font-size: 18px; line-height: 1; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .qty-btn:hover { border-color: var(--teal); color: var(--teal); }
+    .qty-num { font-family: var(--serif); font-size: 24px; color: #fff; min-width: 30px; text-align: center; }
+    .qty-unit { color: var(--muted); font-size: 12px; min-width: 40px; }
 
     /* Login gate */
     .gate { max-width: 380px; margin: 12vh auto; padding: 0 20px; text-align: center; }
@@ -133,37 +246,175 @@
 
   <!-- ============================= Dashboard ============================= -->
   <main class="dash-wrap" id="dash" hidden>
+    <header class="dash-brand">
+      <img class="dash-logo" src="https://i.imgur.com/WjfFLjt.png" alt="Schmitz Beauty Co." />
+      <button class="btn btn-cta" id="logoutBtn">Log out</button>
+    </header>
     <div class="preview-banner" id="previewBanner" hidden>
       👀 Preview mode — showing sample requests. On the live site this is
       password-protected and shows Brenna's real booking requests.
     </div>
-    <div class="dash-head">
-      <div>
-        <h1>Consultation Requests</h1>
-        <p>New booking inquiries from your website.</p>
+    <div class="dash-topbar">
+      <div class="dash-tabs" id="tabs">
+        <button class="tab is-active" data-tab="requests">Requests</button>
+        <button class="tab" data-tab="receipts">Receipts</button>
+        <button class="tab" data-tab="inventory">Inventory</button>
       </div>
-      <div style="display:flex; gap:10px;">
+      <div class="dash-actions">
         <button class="btn btn-secondary" id="refreshBtn">Refresh</button>
-        <button class="btn btn-cta" id="logoutBtn">Log out</button>
       </div>
     </div>
 
-    <div class="dash-stats" id="stats"></div>
-
-    <div class="dash-toolbar">
-      <input class="dash-search" id="search" type="search" placeholder="Search by name, email, or service…" />
-    </div>
-    <div class="dash-toolbar">
-      <div class="filter-chips" id="filters">
-        <button class="chip is-active" data-filter="all">All</button>
-        <button class="chip" data-filter="new">New</button>
-        <button class="chip" data-filter="contacted">Contacted</button>
-        <button class="chip" data-filter="booked">Booked</button>
-        <button class="chip" data-filter="closed">Closed</button>
+    <!-- ===================== Requests view ===================== -->
+    <section id="view-requests">
+      <div class="dash-head">
+        <div>
+          <h1>Consultation Requests</h1>
+          <p>New booking inquiries from your website.</p>
+        </div>
       </div>
-    </div>
 
-    <div id="content"></div>
+      <div class="dash-stats" id="stats"></div>
+
+      <div class="dash-toolbar">
+        <input class="dash-search" id="search" type="search" placeholder="Search by name, email, or service…" />
+      </div>
+      <div class="dash-toolbar">
+        <div class="filter-chips" id="filters">
+          <button class="chip is-active" data-filter="all">All</button>
+          <button class="chip" data-filter="new">New</button>
+          <button class="chip" data-filter="contacted">Contacted</button>
+          <button class="chip" data-filter="booked">Booked</button>
+          <button class="chip" data-filter="closed">Closed</button>
+        </div>
+      </div>
+
+      <div id="content"></div>
+    </section>
+
+    <!-- ===================== Receipts view ===================== -->
+    <section id="view-receipts" hidden>
+      <div class="dash-head">
+        <div>
+          <h1>Receipts &amp; Expenses</h1>
+          <p>Track business expenses and keep a photo of every receipt for taxes.</p>
+        </div>
+        <div class="dash-head-actions">
+          <button class="btn btn-secondary" id="exportBtn">⬇ Download CSV</button>
+          <button class="btn btn-primary" id="addReceiptBtn">+ Add Receipt</button>
+        </div>
+      </div>
+
+      <form class="receipt-form" id="receiptForm" hidden>
+        <div class="receipt-form-grid">
+          <label class="rf-photo">
+            <span class="rf-label">Receipt photo</span>
+            <input type="file" id="rfPhoto" accept="image/*" capture="environment" />
+            <span class="rf-photo-hint">Tap to take a photo, or choose a file.</span>
+            <img id="rfPreview" class="rf-preview" hidden alt="Receipt preview" />
+          </label>
+          <div class="rf-fields">
+            <div class="field">
+              <label for="rfVendor">Vendor / Store</label>
+              <input id="rfVendor" type="text" placeholder="e.g. Sally Beauty" />
+            </div>
+            <div class="rf-row">
+              <div class="field">
+                <label for="rfAmount">Amount ($)</label>
+                <input id="rfAmount" type="number" step="0.01" min="0" inputmode="decimal" placeholder="0.00" />
+              </div>
+              <div class="field">
+                <label for="rfDate">Date</label>
+                <input id="rfDate" type="date" />
+              </div>
+            </div>
+            <div class="field">
+              <label for="rfCategory">Category</label>
+              <select id="rfCategory"></select>
+            </div>
+            <div class="field">
+              <label for="rfNotes">Notes</label>
+              <textarea id="rfNotes" placeholder="What was this for?"></textarea>
+            </div>
+          </div>
+        </div>
+        <div class="rf-actions">
+          <span class="rf-err" id="rfErr"></span>
+          <button type="button" class="btn btn-secondary" id="rfCancel">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="rfSave">Save Receipt</button>
+        </div>
+      </form>
+
+      <div class="dash-stats" id="receiptStats"></div>
+
+      <div class="dash-toolbar">
+        <div class="filter-chips" id="receiptFilters"></div>
+      </div>
+
+      <div id="receiptContent"></div>
+    </section>
+
+    <!-- ===================== Inventory view ===================== -->
+    <section id="view-inventory" hidden>
+      <div class="dash-head">
+        <div>
+          <h1>Inventory</h1>
+          <p>Track your supplies — items turn red when they hit their reorder point.</p>
+        </div>
+        <div class="dash-head-actions">
+          <button class="btn btn-primary" id="addItemBtn">+ Add Item</button>
+        </div>
+      </div>
+
+      <form class="receipt-form" id="itemForm" hidden>
+        <div class="rf-fields">
+          <div class="field">
+            <label for="ivName">Item name</label>
+            <input id="ivName" type="text" placeholder="e.g. 20 vol developer" />
+          </div>
+          <div class="rf-row">
+            <div class="field">
+              <label for="ivCategory">Category</label>
+              <select id="ivCategory"></select>
+            </div>
+            <div class="field">
+              <label for="ivUnit">Unit (optional)</label>
+              <input id="ivUnit" type="text" placeholder="bottles, boxes, each…" />
+            </div>
+          </div>
+          <div class="rf-row">
+            <div class="field">
+              <label for="ivQty">Quantity on hand</label>
+              <input id="ivQty" type="number" min="0" step="1" inputmode="numeric" placeholder="0" />
+            </div>
+            <div class="field">
+              <label for="ivReorder">Reorder when at or below</label>
+              <input id="ivReorder" type="number" min="0" step="1" inputmode="numeric" placeholder="2" />
+            </div>
+          </div>
+          <div class="field">
+            <label for="ivNotes">Notes</label>
+            <textarea id="ivNotes" placeholder="Brand, supplier, etc."></textarea>
+          </div>
+        </div>
+        <div class="rf-actions">
+          <span class="rf-err" id="ivErr"></span>
+          <button type="button" class="btn btn-secondary" id="ivCancel">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="ivSave">Save Item</button>
+        </div>
+      </form>
+
+      <div class="dash-stats" id="inventoryStats"></div>
+
+      <div class="dash-toolbar">
+        <input class="dash-search" id="invSearch" type="search" placeholder="Search items…" />
+      </div>
+      <div class="dash-toolbar">
+        <div class="filter-chips" id="inventoryFilters"></div>
+      </div>
+
+      <div id="inventoryContent"></div>
+    </section>
   </main>
 
   <script>
@@ -176,6 +427,20 @@
       var dash = document.getElementById("dash");
       var allBookings = [];
       var activeFilter = "all";
+
+      // Receipts / expenses state
+      var CATEGORIES = ["Supplies", "Booth Rent", "Tools & Equipment", "Education", "Marketing", "Travel", "Other"];
+      var allExpenses = [];
+      var receiptFilter = "all";
+      var receiptsLoaded = false;
+      var pendingPhoto = null; // { dataUrl, name }
+      var activeTab = "requests";
+
+      // Inventory state
+      var INV_CATEGORIES = ["Color", "Lash", "Nails", "Waxing", "Skincare", "Tools", "Retail", "Other"];
+      var allSupplies = [];
+      var inventoryFilter = "all";
+      var inventoryLoaded = false;
 
       // ---- Preview mode ----
       // When the page runs locally (or with ?preview in the URL) we skip the
@@ -192,6 +457,19 @@
         { id: "s2", createdAt: "2026-06-20T19:30:00Z", fullName: "Sam Rivera", email: "sam.rivera@example.com", phone: "555-988-2210", interestedService: "Lash Extensions", currentHairState: "", beautyGoals: "Natural-looking volume set for a wedding.", inspirationPhotos: "Can send later", preferredDays: "Flexible", additionalNotes: "" },
         { id: "s3", createdAt: "2026-06-18T16:00:00Z", fullName: "Alex Kim", email: "alexk@example.com", phone: "555-776-0098", interestedService: "Nails", currentHairState: "", beautyGoals: "Gel set, almond shape, neutral tones.", inspirationPhotos: "No", preferredDays: "Saturdays", additionalNotes: "First time — a little nervous!" },
         { id: "s4", createdAt: "2026-06-12T13:45:00Z", fullName: "Taylor Brooks", email: "taylor.b@example.com", phone: "", interestedService: "Facials", currentHairState: "", beautyGoals: "Brightening facial, some congestion on the chin.", inspirationPhotos: "", preferredDays: "Weekday mornings", additionalNotes: "" }
+      ];
+
+      var SAMPLE_EXPENSES = [
+        { id: "e1", createdAt: "2026-06-20T00:00:00Z", vendor: "Sally Beauty", amount: 84.32, date: "2026-06-20", category: "Supplies", notes: "Developer + 3 tubes of color.", receiptUrl: "https://i.imgur.com/c68mqDK.png" },
+        { id: "e2", createdAt: "2026-06-15T00:00:00Z", vendor: "Simplicity Salon", amount: 250.00, date: "2026-06-15", category: "Booth Rent", notes: "June booth rent.", receiptUrl: "" },
+        { id: "e3", createdAt: "2026-06-08T00:00:00Z", vendor: "Amazon", amount: 39.99, date: "2026-06-08", category: "Tools & Equipment", notes: "Lash tweezers set.", receiptUrl: "" }
+      ];
+
+      var SAMPLE_SUPPLIES = [
+        { id: "i1", name: "20 vol developer", category: "Color", quantity: 2, reorderAt: 3, unit: "bottles", notes: "Wella" },
+        { id: "i2", name: "Lash adhesive", category: "Lash", quantity: 5, reorderAt: 2, unit: "tubes", notes: "" },
+        { id: "i3", name: "Foils", category: "Color", quantity: 1, reorderAt: 2, unit: "rolls", notes: "Pop-up sheets" },
+        { id: "i4", name: "Nitrile gloves", category: "Tools", quantity: 8, reorderAt: 3, unit: "boxes", notes: "Medium" }
       ];
 
       // Per-request status now lives in Baserow, so changes sync across every
@@ -367,6 +645,439 @@
           "</div></article>";
       }
 
+      // =====================================================================
+      //  Receipts & Expenses
+      // =====================================================================
+      function money(n) {
+        var v = Number(n);
+        if (isNaN(v)) return "$0.00";
+        return "$" + v.toFixed(2);
+      }
+
+      function fmtDay(d) {
+        if (!d) return "—";
+        var dt = new Date(String(d).slice(0, 10) + "T00:00:00");
+        if (isNaN(dt)) return d;
+        return dt.toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" });
+      }
+
+      function populateReceiptControls() {
+        var sel = document.getElementById("rfCategory");
+        if (sel && !sel.options.length) {
+          CATEGORIES.forEach(function (c) {
+            var o = document.createElement("option");
+            o.value = c; o.textContent = c; sel.appendChild(o);
+          });
+        }
+        var filters = document.getElementById("receiptFilters");
+        if (filters && !filters.children.length) {
+          filters.innerHTML = ["all"].concat(CATEGORIES).map(function (c) {
+            return '<button class="chip' + (c === "all" ? " is-active" : "") +
+              '" data-cat="' + esc(c) + '">' + (c === "all" ? "All" : esc(c)) + "</button>";
+          }).join("");
+        }
+        var dateEl = document.getElementById("rfDate");
+        if (dateEl && !dateEl.value) {
+          var t = new Date();
+          dateEl.value = t.getFullYear() + "-" +
+            String(t.getMonth() + 1).padStart(2, "0") + "-" +
+            String(t.getDate()).padStart(2, "0");
+        }
+      }
+
+      async function loadExpenses(key) {
+        var content = document.getElementById("receiptContent");
+        content.innerHTML = '<div class="dash-state">Loading receipts…</div>';
+        if (PREVIEW) {
+          allExpenses = SAMPLE_EXPENSES.slice();
+          receiptsLoaded = true;
+          renderReceipts();
+          return;
+        }
+        try {
+          var res = await fetch("/.netlify/functions/expenses", { headers: { "x-dashboard-key": key } });
+          if (!res.ok) {
+            var msg = "Couldn't load receipts.";
+            try { msg = (await res.json()).error || msg; } catch (e) {}
+            content.innerHTML = '<div class="dash-state"><h3>Couldn\'t load receipts</h3><p>' + esc(msg) + '</p></div>';
+            return;
+          }
+          var data = await res.json();
+          allExpenses = data.expenses || [];
+          receiptsLoaded = true;
+          renderReceipts();
+        } catch (e) {
+          content.innerHTML = '<div class="dash-state"><h3>Network error</h3><p>Could not reach the server.</p></div>';
+        }
+      }
+
+      function renderReceiptStats() {
+        var stats = document.getElementById("receiptStats");
+        var total = 0, monthTotal = 0;
+        var now = new Date();
+        var ym = now.getFullYear() + "-" + String(now.getMonth() + 1).padStart(2, "0");
+        var cats = {};
+        allExpenses.forEach(function (e) {
+          var amt = Number(e.amount) || 0;
+          total += amt;
+          if (String(e.date || "").indexOf(ym) === 0) monthTotal += amt;
+          var c = (e.category || "").trim();
+          if (c) cats[c] = (cats[c] || 0) + amt;
+        });
+        var topCat = "—", max = 0;
+        Object.keys(cats).forEach(function (k) { if (cats[k] > max) { max = cats[k]; topCat = k; } });
+        stats.innerHTML =
+          card(money(total), "Total Spent") +
+          card(money(monthTotal), "This Month") +
+          card(allExpenses.length, "Receipts") +
+          card(topCat, "Top Category");
+        function card(num, label) {
+          return '<div class="stat-card"><div class="num">' + esc(num) +
+            '</div><div class="label">' + esc(label) + '</div></div>';
+        }
+      }
+
+      function expenseCardHtml(e) {
+        var thumb = e.receiptUrl
+          ? '<img class="expense-thumb" src="' + esc(e.receiptUrl) +
+            '" alt="Receipt" onclick="window.open(this.src,\'_blank\')" />'
+          : '<div class="expense-thumb placeholder" title="No photo">🧾</div>';
+        var cat = e.category ? '<span class="cat-tag">' + esc(e.category) + "</span>" : "";
+        var notes = e.notes ? '<div class="expense-notes">' + esc(e.notes) + "</div>" : "";
+        return '<article class="expense-card">' + thumb +
+          '<div class="expense-main">' +
+            '<div class="expense-top"><span class="expense-vendor">' + esc(e.vendor || "—") +
+            '</span><span class="expense-amount">' + esc(money(e.amount)) + "</span></div>" +
+            '<div class="expense-meta">' + esc(fmtDay(e.date)) + (cat ? " " + cat : "") + "</div>" +
+            notes +
+          "</div></article>";
+      }
+
+      function renderReceipts() {
+        populateReceiptControls();
+        renderReceiptStats();
+        var content = document.getElementById("receiptContent");
+        if (!allExpenses.length) {
+          content.innerHTML = '<div class="dash-state"><h3>No receipts yet</h3><p>Tap “Add Receipt” to log your first expense.</p></div>';
+          return;
+        }
+        var list = allExpenses.filter(function (e) {
+          return receiptFilter === "all" || (e.category || "") === receiptFilter;
+        });
+        if (!list.length) {
+          content.innerHTML = '<div class="dash-state"><h3>No receipts in this category</h3></div>';
+          return;
+        }
+        content.innerHTML = '<div class="expense-list">' + list.map(expenseCardHtml).join("") + "</div>";
+      }
+
+      function resetReceiptForm() {
+        document.getElementById("receiptForm").hidden = true;
+        document.getElementById("rfVendor").value = "";
+        document.getElementById("rfAmount").value = "";
+        if (document.getElementById("rfCategory").options.length) document.getElementById("rfCategory").selectedIndex = 0;
+        document.getElementById("rfNotes").value = "";
+        document.getElementById("rfPhoto").value = "";
+        document.getElementById("rfDate").value = "";
+        var p = document.getElementById("rfPreview"); p.hidden = true; p.src = "";
+        document.getElementById("rfErr").textContent = "";
+        pendingPhoto = null;
+        populateReceiptControls();
+      }
+
+      async function saveReceipt(ev) {
+        ev.preventDefault();
+        var err = document.getElementById("rfErr"); err.textContent = "";
+        var vendor = (document.getElementById("rfVendor").value || "").trim();
+        var amount = (document.getElementById("rfAmount").value || "").trim();
+        var date = document.getElementById("rfDate").value;
+        var category = document.getElementById("rfCategory").value;
+        var notes = (document.getElementById("rfNotes").value || "").trim();
+        if (!amount && !vendor && !pendingPhoto) {
+          err.textContent = "Add at least a photo or an amount."; return;
+        }
+
+        var saveBtn = document.getElementById("rfSave");
+        var orig = saveBtn.textContent;
+        saveBtn.disabled = true; saveBtn.textContent = "Saving…";
+        try {
+          if (PREVIEW) {
+            allExpenses.unshift({
+              id: "local" + Date.now(), createdAt: new Date().toISOString(),
+              vendor: vendor, amount: amount, date: date, category: category, notes: notes,
+              receiptUrl: pendingPhoto ? pendingPhoto.dataUrl : "",
+            });
+          } else {
+            var payload = { vendor: vendor, amount: amount, date: date, category: category, notes: notes };
+            if (pendingPhoto) { payload.imageBase64 = pendingPhoto.dataUrl; payload.imageName = pendingPhoto.name; }
+            var res = await fetch("/.netlify/functions/expenses", {
+              method: "POST",
+              headers: { "Content-Type": "application/json", "x-dashboard-key": sessionStorage.getItem(KEY) || "" },
+              body: JSON.stringify(payload),
+            });
+            if (!res.ok) {
+              var m = "Couldn't save.";
+              try { m = (await res.json()).error || m; } catch (e) {}
+              throw new Error(m);
+            }
+            var data = await res.json();
+            allExpenses.unshift(data.expense);
+          }
+          resetReceiptForm();
+          renderReceipts();
+        } catch (e) {
+          err.textContent = e.message || "Couldn't save. Try again.";
+        } finally {
+          saveBtn.disabled = false; saveBtn.textContent = orig;
+        }
+      }
+
+      // Download every expense as a CSV she can hand to her accountant at tax time.
+      function csvCell(v) {
+        v = String(v == null ? "" : v);
+        return /[",\n\r]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v;
+      }
+      function exportExpensesCsv() {
+        if (!allExpenses.length) { alert("No receipts to download yet."); return; }
+        var data = allExpenses.slice().sort(function (a, b) {
+          return String(a.date || "").localeCompare(String(b.date || ""));
+        });
+        var rows = [["Date", "Vendor", "Amount", "Category", "Notes", "Receipt"]];
+        var total = 0;
+        data.forEach(function (e) {
+          var amt = (e.amount === "" || e.amount == null) ? "" : Number(e.amount);
+          if (amt !== "" && !isNaN(amt)) total += amt;
+          rows.push([e.date || "", e.vendor || "", amt === "" ? "" : amt.toFixed(2),
+            e.category || "", e.notes || "", e.receiptUrl || ""]);
+        });
+        rows.push([]);
+        rows.push(["", "TOTAL", total.toFixed(2), "", "", ""]);
+
+        var csv = rows.map(function (r) { return r.map(csvCell).join(","); }).join("\r\n");
+        // Prepend a BOM so Excel opens the £/accents correctly.
+        var blob = new Blob(["﻿" + csv], { type: "text/csv;charset=utf-8;" });
+        var url = URL.createObjectURL(blob);
+        var a = document.createElement("a");
+        a.href = url;
+        a.download = "schmitz-expenses-" + new Date().getFullYear() + ".csv";
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        setTimeout(function () { URL.revokeObjectURL(url); }, 1500);
+      }
+
+      // =====================================================================
+      //  Inventory
+      // =====================================================================
+      function supplyById(id) {
+        for (var i = 0; i < allSupplies.length; i++) {
+          if (String(allSupplies[i].id) === String(id)) return allSupplies[i];
+        }
+        return null;
+      }
+      function isLow(s) { return Number(s.quantity) <= Number(s.reorderAt); }
+
+      function populateInventoryControls() {
+        var sel = document.getElementById("ivCategory");
+        if (sel && !sel.options.length) {
+          INV_CATEGORIES.forEach(function (c) {
+            var o = document.createElement("option");
+            o.value = c; o.textContent = c; sel.appendChild(o);
+          });
+        }
+        var filters = document.getElementById("inventoryFilters");
+        if (filters && !filters.children.length) {
+          var chips = [
+            { k: "all", label: "All" },
+            { k: "low", label: "Low stock" },
+          ].concat(INV_CATEGORIES.map(function (c) { return { k: c, label: c }; }));
+          filters.innerHTML = chips.map(function (c) {
+            return '<button class="chip' + (c.k === "all" ? " is-active" : "") +
+              '" data-inv="' + esc(c.k) + '">' + esc(c.label) + "</button>";
+          }).join("");
+        }
+      }
+
+      async function loadInventory(key) {
+        var content = document.getElementById("inventoryContent");
+        content.innerHTML = '<div class="dash-state">Loading inventory…</div>';
+        if (PREVIEW) {
+          allSupplies = SAMPLE_SUPPLIES.slice();
+          inventoryLoaded = true;
+          renderInventory();
+          return;
+        }
+        try {
+          var res = await fetch("/.netlify/functions/supplies", { headers: { "x-dashboard-key": key } });
+          if (!res.ok) {
+            var msg = "Couldn't load inventory.";
+            try { msg = (await res.json()).error || msg; } catch (e) {}
+            content.innerHTML = '<div class="dash-state"><h3>Couldn\'t load inventory</h3><p>' + esc(msg) + '</p></div>';
+            return;
+          }
+          var data = await res.json();
+          allSupplies = data.supplies || [];
+          inventoryLoaded = true;
+          renderInventory();
+        } catch (e) {
+          content.innerHTML = '<div class="dash-state"><h3>Network error</h3><p>Could not reach the server.</p></div>';
+        }
+      }
+
+      function renderInventoryStats() {
+        var stats = document.getElementById("inventoryStats");
+        var low = 0, out = 0, cats = {};
+        allSupplies.forEach(function (s) {
+          if (isLow(s)) low++;
+          if (Number(s.quantity) <= 0) out++;
+          var c = (s.category || "").trim();
+          if (c) cats[c] = true;
+        });
+        stats.innerHTML =
+          card(allSupplies.length, "Items Tracked") +
+          card(low, "Low Stock") +
+          card(out, "Out of Stock") +
+          card(Object.keys(cats).length, "Categories");
+        function card(num, label) {
+          return '<div class="stat-card"><div class="num">' + esc(num) +
+            '</div><div class="label">' + esc(label) + '</div></div>';
+        }
+      }
+
+      function supplyCardHtml(s) {
+        var low = isLow(s);
+        var cat = s.category ? '<span class="cat-tag">' + esc(s.category) + "</span>" : "";
+        var notes = s.notes ? '<div class="inv-notes">' + esc(s.notes) + "</div>" : "";
+        return '<article class="inv-card" data-low="' + (low ? "true" : "false") +
+          '" data-id="' + esc(s.id) + '">' +
+          '<div class="inv-main">' +
+            '<div class="inv-top"><span class="inv-name">' + esc(s.name || "—") + "</span>" +
+            cat + '<span class="inv-low-badge">Low</span></div>' +
+            '<div class="inv-sub">Reorder at ' + esc(s.reorderAt) + "</div>" +
+            notes +
+          "</div>" +
+          '<div class="inv-qty">' +
+            '<button class="qty-btn" data-act="dec" data-id="' + esc(s.id) + '" aria-label="Decrease">−</button>' +
+            '<span class="qty-num">' + esc(s.quantity) + "</span>" +
+            '<span class="qty-unit">' + esc(s.unit || "") + "</span>" +
+            '<button class="qty-btn" data-act="inc" data-id="' + esc(s.id) + '" aria-label="Increase">+</button>' +
+          "</div></article>";
+      }
+
+      function renderInventory() {
+        populateInventoryControls();
+        renderInventoryStats();
+        var content = document.getElementById("inventoryContent");
+        if (!allSupplies.length) {
+          content.innerHTML = '<div class="dash-state"><h3>No items yet</h3><p>Tap “Add Item” to start tracking your supplies.</p></div>';
+          return;
+        }
+        var q = (document.getElementById("invSearch").value || "").toLowerCase().trim();
+        var list = allSupplies.filter(function (s) {
+          if (inventoryFilter === "low") { if (!isLow(s)) return false; }
+          else if (inventoryFilter !== "all" && (s.category || "") !== inventoryFilter) return false;
+          if (!q) return true;
+          return (s.name + " " + s.category + " " + s.notes).toLowerCase().indexOf(q) !== -1;
+        });
+        if (!list.length) {
+          content.innerHTML = '<div class="dash-state"><h3>No items match</h3></div>';
+          return;
+        }
+        content.innerHTML = '<div class="inv-list">' + list.map(supplyCardHtml).join("") + "</div>";
+      }
+
+      async function adjustQty(id, delta) {
+        var s = supplyById(id);
+        if (!s) return;
+        var prev = Number(s.quantity) || 0;
+        var next = Math.max(0, prev + delta);
+        if (next === prev) return;
+        s.quantity = next; // optimistic
+        renderInventory();
+        if (PREVIEW) return;
+        try {
+          var res = await fetch("/.netlify/functions/supplies", {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json", "x-dashboard-key": sessionStorage.getItem(KEY) || "" },
+            body: JSON.stringify({ id: id, quantity: next }),
+          });
+          if (!res.ok) throw new Error("save failed");
+        } catch (e) {
+          s.quantity = prev; // roll back
+          renderInventory();
+          alert("Couldn't save that change. Check your connection and try again.");
+        }
+      }
+
+      function resetItemForm() {
+        document.getElementById("itemForm").hidden = true;
+        document.getElementById("ivName").value = "";
+        if (document.getElementById("ivCategory").options.length) document.getElementById("ivCategory").selectedIndex = 0;
+        document.getElementById("ivUnit").value = "";
+        document.getElementById("ivQty").value = "";
+        document.getElementById("ivReorder").value = "";
+        document.getElementById("ivNotes").value = "";
+        document.getElementById("ivErr").textContent = "";
+      }
+
+      async function saveItem(ev) {
+        ev.preventDefault();
+        var err = document.getElementById("ivErr"); err.textContent = "";
+        var name = (document.getElementById("ivName").value || "").trim();
+        if (!name) { err.textContent = "Give the item a name."; return; }
+        var category = document.getElementById("ivCategory").value;
+        var unit = (document.getElementById("ivUnit").value || "").trim();
+        var qty = parseInt(document.getElementById("ivQty").value, 10);
+        var reorder = parseInt(document.getElementById("ivReorder").value, 10);
+        if (isNaN(qty)) qty = 0;
+        if (isNaN(reorder)) reorder = 0;
+        var notes = (document.getElementById("ivNotes").value || "").trim();
+
+        var saveBtn = document.getElementById("ivSave");
+        var orig = saveBtn.textContent;
+        saveBtn.disabled = true; saveBtn.textContent = "Saving…";
+        try {
+          if (PREVIEW) {
+            allSupplies.unshift({ id: "local" + Date.now(), name: name, category: category, quantity: qty, reorderAt: reorder, unit: unit, notes: notes });
+          } else {
+            var res = await fetch("/.netlify/functions/supplies", {
+              method: "POST",
+              headers: { "Content-Type": "application/json", "x-dashboard-key": sessionStorage.getItem(KEY) || "" },
+              body: JSON.stringify({ name: name, category: category, quantity: qty, reorderAt: reorder, unit: unit, notes: notes }),
+            });
+            if (!res.ok) {
+              var m = "Couldn't save.";
+              try { m = (await res.json()).error || m; } catch (e) {}
+              throw new Error(m);
+            }
+            var data = await res.json();
+            allSupplies.unshift(data.supply);
+          }
+          resetItemForm();
+          renderInventory();
+        } catch (e) {
+          err.textContent = e.message || "Couldn't save. Try again.";
+        } finally {
+          saveBtn.disabled = false; saveBtn.textContent = orig;
+        }
+      }
+
+      function switchTab(name) {
+        activeTab = name;
+        Array.prototype.forEach.call(document.querySelectorAll("#tabs .tab"), function (t) {
+          t.classList.toggle("is-active", t.getAttribute("data-tab") === name);
+        });
+        show(document.getElementById("view-requests"), name === "requests");
+        show(document.getElementById("view-receipts"), name === "receipts");
+        show(document.getElementById("view-inventory"), name === "inventory");
+        if (name === "receipts" && !receiptsLoaded) {
+          loadExpenses(sessionStorage.getItem(KEY) || "");
+        }
+        if (name === "inventory" && !inventoryLoaded) {
+          loadInventory(sessionStorage.getItem(KEY) || "");
+        }
+      }
+
       function openDashboard() {
         show(gate, false);
         show(document.getElementById("reset"), false);
@@ -461,8 +1172,80 @@
         render();
       });
 
+      // ----- Receipts wiring -----
+      document.getElementById("tabs").addEventListener("click", function (e) {
+        var t = e.target.closest && e.target.closest(".tab");
+        if (t) switchTab(t.getAttribute("data-tab"));
+      });
+
+      document.getElementById("addReceiptBtn").addEventListener("click", function () {
+        var f = document.getElementById("receiptForm");
+        f.hidden = !f.hidden;
+        if (!f.hidden) { populateReceiptControls(); document.getElementById("rfVendor").focus(); }
+      });
+
+      document.getElementById("rfCancel").addEventListener("click", resetReceiptForm);
+      document.getElementById("receiptForm").addEventListener("submit", saveReceipt);
+      document.getElementById("exportBtn").addEventListener("click", exportExpensesCsv);
+
+      document.getElementById("rfPhoto").addEventListener("change", function () {
+        var file = this.files && this.files[0];
+        if (!file) { pendingPhoto = null; return; }
+        var reader = new FileReader();
+        reader.onload = function () {
+          pendingPhoto = { dataUrl: reader.result, name: file.name };
+          var p = document.getElementById("rfPreview");
+          p.src = reader.result; p.hidden = false;
+        };
+        reader.readAsDataURL(file);
+      });
+
+      document.getElementById("receiptFilters").addEventListener("click", function (e) {
+        var chip = e.target.closest && e.target.closest(".chip");
+        if (!chip) return;
+        receiptFilter = chip.getAttribute("data-cat");
+        Array.prototype.forEach.call(this.querySelectorAll(".chip"), function (c) {
+          c.classList.toggle("is-active", c === chip);
+        });
+        renderReceipts();
+      });
+
+      // ----- Inventory wiring -----
+      document.getElementById("addItemBtn").addEventListener("click", function () {
+        var f = document.getElementById("itemForm");
+        f.hidden = !f.hidden;
+        if (!f.hidden) { populateInventoryControls(); document.getElementById("ivName").focus(); }
+      });
+      document.getElementById("ivCancel").addEventListener("click", resetItemForm);
+      document.getElementById("itemForm").addEventListener("submit", saveItem);
+      document.getElementById("invSearch").addEventListener("input", renderInventory);
+
+      document.getElementById("inventoryContent").addEventListener("click", function (e) {
+        var btn = e.target.closest && e.target.closest(".qty-btn");
+        if (!btn) return;
+        adjustQty(btn.getAttribute("data-id"), btn.getAttribute("data-act") === "inc" ? 1 : -1);
+      });
+
+      document.getElementById("inventoryFilters").addEventListener("click", function (e) {
+        var chip = e.target.closest && e.target.closest(".chip");
+        if (!chip) return;
+        inventoryFilter = chip.getAttribute("data-inv");
+        Array.prototype.forEach.call(this.querySelectorAll(".chip"), function (c) {
+          c.classList.toggle("is-active", c === chip);
+        });
+        renderInventory();
+      });
+
       document.getElementById("refreshBtn").addEventListener("click", function () {
-        load(sessionStorage.getItem(KEY) || "");
+        if (activeTab === "receipts") {
+          receiptsLoaded = false;
+          loadExpenses(sessionStorage.getItem(KEY) || "");
+        } else if (activeTab === "inventory") {
+          inventoryLoaded = false;
+          loadInventory(sessionStorage.getItem(KEY) || "");
+        } else {
+          load(sessionStorage.getItem(KEY) || "");
+        }
       });
 
       document.getElementById("logoutBtn").addEventListener("click", function () {
