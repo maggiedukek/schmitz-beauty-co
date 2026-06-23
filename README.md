@@ -1,4 +1,51 @@
+# Brenna's Dashboard — Setup
+
+The site has a private dashboard at **`/admin`** (e.g. `https://your-site.netlify.app/admin`)
+where Brenna reads the consultation requests submitted through the booking form.
+
+**How it works.** Data lives in a **Baserow** database (the "Schmitz Beauty Co." database,
+in the `Leads` table). Two small serverless functions handle everything, and the secret
+Baserow token never touches the browser:
+
+- `netlify/functions/submission-created.js` runs automatically whenever the booking form
+  is submitted, and copies the request into Baserow. (Your existing Netlify email
+  notification still fires too — this just adds the dashboard copy.)
+- `netlify/functions/leads.js` powers the dashboard: it lists the leads and saves status
+  changes back to Baserow. Because status now lives in the database, changes **sync across
+  every device** Brenna uses — phone and laptop both stay in step.
+
+To turn it on, set **two environment variables** in Netlify
+(**Site configuration → Environment variables → Add a variable**):
+
+| Variable | What to put |
+|---|---|
+| `BASEROW_TOKEN` | The Baserow database token. In Baserow: **avatar → My settings → Database tokens → "Schmitz Dashboard" → reveal/copy**. Keep it secret. |
+| `DASHBOARD_PASSWORD` | The password Brenna will type to open the dashboard. Pick anything. |
+
+*(Optional: `BASEROW_LEADS_TABLE_ID` — only needed if the Leads table ID ever changes. Defaults to `1041326`.)*
+
+After adding the variables, trigger a redeploy (**Deploys → Trigger deploy**). Then visit
+`https://your-site.netlify.app/admin`, enter the password, and the requests
+appear. The page is marked `noindex`, so search engines won't list it — but
+**share the link only with Brenna**, since the password is the only thing protecting it.
+
+> Brenna can also see and edit the raw data anytime by logging into Baserow directly —
+> handy for the `Supplies` and `Expenses` tables, which are set up and ready for the next
+> phases (inventory alerts and receipt/tax tracking).
+
+**Tracking requests.** Each request has a status — **New → Contacted → Booked → Closed**.
+Brenna sets it from the dropdown on each card, and the chips at the top filter by status
+(plus a "New / Unhandled" counter). Statuses save to Baserow instantly and sync everywhere.
+
+---
+
 # Schmitz Beauty Co. — Setup Guide
+
+> ⚠️ The steps below were written for the older Expo version of this project and mention
+> files like `App.js` and the `npx expo export` build. The site is now plain HTML/CSS/JS
+> (`index.html`, `book.html`, `admin.html`, `styles.css`, `script.js`), and
+> `netlify.toml` already has the correct build command. The GitHub + Netlify workflow
+> in Steps 1–4 still applies.
 
 This folder is your app. It's built with **Expo**, which means the same code runs as
 a **website** (for Netlify, so Brenna can see it) *and* later as a real **iPhone/Android app**.
@@ -78,27 +125,4 @@ automatically** in a couple of minutes. To update:
 2. Click the pencil ✏️ icon, paste the new version, click **Commit changes**.
 3. Netlify rebuilds and the live site updates on its own. Refresh the page to see it.
 
-(When I send you updated code, you'll just replace `App.js` this way.)
-
----
-
-## Want to preview it on your own computer first? (optional)
-
-If you ever install Node.js (https://nodejs.org), you can run it locally:
-
-```
-npm install
-npm run web
-```
-
-This is optional — Netlify builds it for you either way.
-
----
-
-## Quick reference
-
-| Thing | Where |
-|------|-------|
-| Your code | GitHub repository `schmitz-beauty-co` |
-| The live website | Your Netlify site link |
-| The file you'll edit most | `App.js` |
+(When I send you updated code, you'll just replace `App.js` this way.

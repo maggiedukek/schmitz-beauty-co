@@ -3,5 +3,12 @@
 # regardless of any leftover publish-directory setting from the old Expo app.
 
 [build]
-  command = "rm -rf dist && mkdir -p dist && cp index.html book.html styles.css script.js dist/ && cp -r images dist/"
+  command = "rm -rf dist && mkdir -p dist && cp index.html book.html admin.html styles.css script.js dist/ && cp -r images dist/"
   publish = "dist"
+  functions = "netlify/functions"
+
+# Brenna's private dashboard lives at /admin (serves admin.html, URL stays clean).
+[[redirects]]
+  from = "/admin"
+  to = "/admin.html"
+  status = 200

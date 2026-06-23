@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Brenna's Dashboard — Schmitz Beauty Co.</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Inter:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    /* -------- Dashboard-only styles -------- */
+    .dash-wrap { max-width: 1100px; margin: 0 auto; padding: 32px 20px 80px; }
+    .dash-head {
+      display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+      gap: 16px; margin-bottom: 28px;
+    }
+    .dash-head h1 { font-family: var(--serif); font-size: clamp(28px, 4vw, 42px); color: #fff; }
+    .dash-head p { color: var(--muted); margin-top: 4px; }
+
+    .dash-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 14px; margin-bottom: 28px; }
+    .stat-card {
+      background: var(--dark-alt); border: 1px solid rgba(255,255,255,0.08);
+      border-radius: var(--radius); padding: 18px 20px;
+    }
+    .stat-card .num { font-family: var(--serif); font-size: 32px; color: var(--teal); line-height: 1.1; }
+    .stat-card .label { color: var(--muted); font-size: 13px; text-transform: uppercase; letter-spacing: .04em; margin-top: 6px; }
+
+    .dash-toolbar { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-bottom: 18px; }
+    .dash-search {
+      flex: 1; min-width: 200px; padding: 12px 14px; border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.12); background: var(--dark-alt); color: #fff; font: inherit;
+    }
+    .dash-search::placeholder { color: #7c7c85; }
+
+    .booking-list { display: flex; flex-direction: column; gap: 14px; }
+    .booking-card {
+      background: var(--dark-alt); border: 1px solid rgba(255,255,255,0.08);
+      border-left: 4px solid var(--teal); border-radius: var(--radius);
+      padding: 18px 20px; transition: border-color .15s;
+    }
+    .booking-card:hover { border-left-color: var(--red); }
+    .booking-top { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; align-items: baseline; }
+    .booking-name { font-size: 18px; font-weight: 700; color: #fff; }
+    .booking-date { color: var(--muted); font-size: 13px; white-space: nowrap; }
+    .booking-contact { color: var(--teal); font-size: 14px; margin: 4px 0 12px; display: flex; flex-wrap: wrap; gap: 14px; }
+    .booking-contact a { color: var(--teal); text-decoration: none; }
+    .booking-contact a:hover { text-decoration: underline; }
+    .booking-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px 22px; }
+    .booking-field .k { font-size: 11px; text-transform: uppercase; letter-spacing: .05em; color: #7c7c85; }
+    .booking-field .v { color: #e8e8ea; font-size: 14px; white-space: pre-wrap; }
+    .service-tag {
+      display: inline-block; background: rgba(10,186,181,0.15); color: var(--teal);
+      border-radius: 999px; padding: 2px 12px; font-size: 13px; font-weight: 600;
+    }
+
+    .dash-state { text-align: center; color: var(--muted); padding: 60px 20px; }
+    .dash-state h3 { font-family: var(--serif); color: #fff; font-size: 24px; margin-bottom: 8px; }
+
+    .preview-banner {
+      background: rgba(227,160,8,0.14); border: 1px solid rgba(227,160,8,0.5);
+      color: #f3c969; border-radius: 12px; padding: 12px 16px; font-size: 14px; margin-bottom: 22px;
+    }
+
+    /* Status tracking */
+    .filter-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+    .chip {
+      background: var(--dark-alt); border: 1px solid rgba(255,255,255,0.12); color: var(--muted);
+      border-radius: 999px; padding: 7px 14px; font: inherit; font-size: 13px; cursor: pointer;
+    }
+    .chip.is-active { background: var(--teal); border-color: var(--teal); color: #04302f; font-weight: 600; }
+    .booking-status { display: flex; align-items: center; gap: 8px; margin: 4px 0 12px; }
+    .booking-status select {
+      font: inherit; font-size: 13px; font-weight: 600; padding: 5px 10px; border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.18); background: var(--dark); color: #fff; cursor: pointer;
+    }
+    /* Card accent + dot reflect status */
+    .booking-card[data-status="new"]       { border-left-color: var(--teal); }
+    .booking-card[data-status="contacted"] { border-left-color: #e3a008; }
+    .booking-card[data-status="booked"]    { border-left-color: #2bb673; }
+    .booking-card[data-status="closed"]    { border-left-color: #6b6b75; opacity: .72; }
+    .status-dot { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }
+    .booking-card[data-status="new"]       .status-dot { background: var(--teal); }
+    .booking-card[data-status="contacted"] .status-dot { background: #e3a008; }
+    .booking-card[data-status="booked"]    .status-dot { background: #2bb673; }
+    .booking-card[data-status="closed"]    .status-dot { background: #6b6b75; }
+
+    /* Login gate */
+    .gate { max-width: 380px; margin: 12vh auto; padding: 0 20px; text-align: center; }
+    .gate img { width: 120px; margin: 0 auto 24px; }
+    .gate h1 { font-family: var(--serif); font-size: 30px; color: #fff; margin-bottom: 6px; }
+    .gate p { color: var(--muted); margin-bottom: 22px; }
+    .gate input {
+      width: 100%; padding: 14px 16px; border-radius: 10px; font: inherit;
+      border: 1px solid rgba(255,255,255,0.14); background: var(--dark-alt); color: #fff; margin-bottom: 14px;
+    }
+    .gate .err { color: #ff6b6b; font-size: 14px; min-height: 20px; margin-bottom: 8px; }
+    .btn-block { width: 100%; }
+    .link-muted { background: none; border: none; color: var(--muted); cursor: pointer; font: inherit; text-decoration: underline; margin-top: 18px; }
+  </style>
+</head>
+<body>
+  <!-- ============================= Login gate ============================= -->
+  <section class="gate" id="gate">
+    <img src="https://i.imgur.com/WjfFLjt.png" alt="Schmitz Beauty Co." />
+    <h1>Brenna's Dashboard</h1>
+    <p>Enter your password to view consultation requests.</p>
+    <form id="gateForm">
+      <input id="pw" type="password" placeholder="Password" autocomplete="current-password" autofocus />
+      <div class="err" id="gateErr"></div>
+      <button type="submit" class="btn btn-primary btn-block">Open Dashboard</button>
+    </form>
+    <a class="link-muted" href="index.html">← Back to website</a>
+  </section>
+
+  <!-- ===================== First-login password reset ===================== -->
+  <section class="gate" id="reset" hidden>
+    <img src="https://i.imgur.com/WjfFLjt.png" alt="Schmitz Beauty Co." />
+    <h1>Choose your password</h1>
+    <p>Welcome, Brenna! Set a password only you know — you'll use it from now on.</p>
+    <form id="resetForm">
+      <input id="np1" type="password" placeholder="New password (at least 6 characters)" autocomplete="new-password" />
+      <input id="np2" type="password" placeholder="Confirm new password" autocomplete="new-password" />
+      <div class="err" id="resetErr"></div>
+      <button type="submit" class="btn btn-primary btn-block">Save &amp; open dashboard</button>
+    </form>
+  </section>
+
+  <!-- ============================= Dashboard ============================= -->
+  <main class="dash-wrap" id="dash" hidden>
+    <div class="preview-banner" id="previewBanner" hidden>
+      👀 Preview mode — showing sample requests. On the live site this is
+      password-protected and shows Brenna's real booking requests.
+    </div>
+    <div class="dash-head">
+      <div>
+        <h1>Consultation Requests</h1>
+        <p>New booking inquiries from your website.</p>
+      </div>
+      <div style="display:flex; gap:10px;">
+        <button class="btn btn-secondary" id="refreshBtn">Refresh</button>
+        <button class="btn btn-cta" id="logoutBtn">Log out</button>
+      </div>
+    </div>
+
+    <div class="dash-stats" id="stats"></div>
+
+    <div class="dash-toolbar">
+      <input class="dash-search" id="search" type="search" placeholder="Search by name, email, or service…" />
+    </div>
+    <div class="dash-toolbar">
+      <div class="filter-chips" id="filters">
+        <button class="chip is-active" data-filter="all">All</button>
+        <button class="chip" data-filter="new">New</button>
+        <button class="chip" data-filter="contacted">Contacted</button>
+        <button class="chip" data-filter="booked">Booked</button>
+        <button class="chip" data-filter="closed">Closed</button>
+      </div>
+    </div>
+
+    <div id="content"></div>
+  </main>
+
+  <script>
+    (function () {
+      var KEY = "sbc_dashboard_key";
+      var STATUS_KEY = "sbc_booking_status";
+      var STATUSES = ["new", "contacted", "booked", "closed"];
+      var STATUS_LABEL = { new: "New", contacted: "Contacted", booked: "Booked", closed: "Closed" };
+      var gate = document.getElementById("gate");
+      var dash = document.getElementById("dash");
+      var allBookings = [];
+      var activeFilter = "all";
+
+      // ---- Preview mode ----
+      // When the page runs locally (or with ?preview in the URL) we skip the
+      // password and show sample bookings, so the dashboard can be built out
+      // without a live backend. On the real Netlify site this is false, so the
+      // password gate and real data apply.
+      var PREVIEW =
+        location.hostname === "localhost" ||
+        location.hostname === "127.0.0.1" ||
+        location.search.indexOf("preview") !== -1;
+
+      var SAMPLE_BOOKINGS = [
+        { id: "s1", createdAt: "2026-06-21T14:10:00Z", fullName: "Jordan Lee", email: "jordan@example.com", phone: "555-123-4567", interestedService: "Vivid Color", currentHairState: "Box-dyed dark brown, grown out about 3 inches.", beautyGoals: "Go a bright copper for summer.", inspirationPhotos: "Yes — can text them over.", preferredDays: "Weekday evenings", additionalNotes: "Sensitive to ammonia." },
+        { id: "s2", createdAt: "2026-06-20T19:30:00Z", fullName: "Sam Rivera", email: "sam.rivera@example.com", phone: "555-988-2210", interestedService: "Lash Extensions", currentHairState: "", beautyGoals: "Natural-looking volume set for a wedding.", inspirationPhotos: "Can send later", preferredDays: "Flexible", additionalNotes: "" },
+        { id: "s3", createdAt: "2026-06-18T16:00:00Z", fullName: "Alex Kim", email: "alexk@example.com", phone: "555-776-0098", interestedService: "Nails", currentHairState: "", beautyGoals: "Gel set, almond shape, neutral tones.", inspirationPhotos: "No", preferredDays: "Saturdays", additionalNotes: "First time — a little nervous!" },
+        { id: "s4", createdAt: "2026-06-12T13:45:00Z", fullName: "Taylor Brooks", email: "taylor.b@example.com", phone: "", interestedService: "Facials", currentHairState: "", beautyGoals: "Brightening facial, some congestion on the chin.", inspirationPhotos: "", preferredDays: "Weekday mornings", additionalNotes: "" }
+      ];
+
+      // Per-request status now lives in Baserow, so changes sync across every
+      // device Brenna uses (phone, laptop) instead of being stuck in one browser.
+      function leadById(id) {
+        for (var i = 0; i < allBookings.length; i++) {
+          if (String(allBookings[i].id) === String(id)) return allBookings[i];
+        }
+        return null;
+      }
+      function statusFor(id) {
+        var l = leadById(id);
+        return (l && l.status) ? l.status : "new";
+      }
+      async function setStatus(id, value) {
+        var l = leadById(id);
+        var prev = l ? l.status : "new";
+        if (l) l.status = value; // optimistic update
+        render();
+
+        if (PREVIEW) return; // no backend in preview mode
+
+        try {
+          var res = await fetch("/.netlify/functions/leads", {
+            method: "PATCH",
+            headers: {
+              "Content-Type": "application/json",
+              "x-dashboard-key": sessionStorage.getItem(KEY) || "",
+            },
+            body: JSON.stringify({ id: id, status: value }),
+          });
+          if (!res.ok) throw new Error("save failed");
+        } catch (e) {
+          if (l) l.status = prev; // roll back on failure
+          render();
+          alert("Couldn't save that change. Check your connection and try again.");
+        }
+      }
+
+      function esc(str) {
+        return String(str == null ? "" : str)
+          .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+      }
+
+      function fmtDate(iso) {
+        if (!iso) return "—";
+        var d = new Date(iso);
+        if (isNaN(d)) return iso;
+        return d.toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" }) +
+          " · " + d.toLocaleTimeString(undefined, { hour: "numeric", minute: "2-digit" });
+      }
+
+      function show(el, on) { el.hidden = !on; }
+
+      async function load(key) {
+        var content = document.getElementById("content");
+        content.innerHTML = '<div class="dash-state">Loading requests…</div>';
+        var res;
+        try {
+          res = await fetch("/.netlify/functions/leads", {
+            headers: { "x-dashboard-key": key },
+          });
+        } catch (e) {
+          content.innerHTML = '<div class="dash-state"><h3>Network error</h3><p>Could not reach the server.</p></div>';
+          return false;
+        }
+
+        if (res.status === 401) return false; // wrong password
+        if (!res.ok) {
+          var msg = "Something went wrong.";
+          try { msg = (await res.json()).error || msg; } catch (e) {}
+          content.innerHTML = '<div class="dash-state"><h3>Couldn\'t load requests</h3><p>' + esc(msg) + '</p></div>';
+          return true; // authenticated, but a server-side issue
+        }
+
+        var data = await res.json();
+        allBookings = data.submissions || [];
+        render();
+        return true;
+      }
+
+      function renderStats() {
+        var stats = document.getElementById("stats");
+        var now = new Date();
+        var sevenDaysAgo = new Date(now.getTime() - 7 * 864e5);
+        var recent = allBookings.filter(function (b) {
+          var d = new Date(b.createdAt);
+          return !isNaN(d) && d >= sevenDaysAgo;
+        }).length;
+        var newCount = allBookings.filter(function (b) {
+          return statusFor(b.id) === "new";
+        }).length;
+        var services = {}; // key: lowercased, value: { count, label }
+        allBookings.forEach(function (b) {
+          var s = (b.interestedService || "").trim();
+          if (!s) return;
+          var k = s.toLowerCase();
+          if (!services[k]) services[k] = { count: 0, label: s };
+          services[k].count++;
+        });
+        var topService = "—";
+        var max = 0;
+        Object.keys(services).forEach(function (k) {
+          if (services[k].count > max) { max = services[k].count; topService = services[k].label; }
+        });
+
+        stats.innerHTML =
+          card(allBookings.length, "Total Requests") +
+          card(newCount, "New / Unhandled") +
+          card(recent, "Last 7 Days") +
+          card(topService, "Top Service");
+
+        function card(num, label) {
+          return '<div class="stat-card"><div class="num">' + esc(num) +
+            '</div><div class="label">' + esc(label) + '</div></div>';
+        }
+      }
+
+      function render() {
+        renderStats();
+        var q = (document.getElementById("search").value || "").toLowerCase().trim();
+        var list = allBookings.filter(function (b) {
+          if (activeFilter !== "all" && statusFor(b.id) !== activeFilter) return false;
+          if (!q) return true;
+          return (b.fullName + " " + b.email + " " + b.interestedService).toLowerCase().indexOf(q) !== -1;
+        });
+
+        var content = document.getElementById("content");
+        if (!allBookings.length) {
+          content.innerHTML = '<div class="dash-state"><h3>No requests yet</h3><p>New consultation requests from your website will appear here.</p></div>';
+          return;
+        }
+        if (!list.length) {
+          content.innerHTML = '<div class="dash-state"><h3>No matches</h3><p>Try a different search.</p></div>';
+          return;
+        }
+
+        content.innerHTML = '<div class="booking-list">' + list.map(cardHtml).join("") + "</div>";
+      }
+
+      function field(k, v) {
+        if (!v || !String(v).trim()) return "";
+        return '<div class="booking-field"><div class="k">' + esc(k) +
+          '</div><div class="v">' + esc(v) + "</div></div>";
+      }
+
+      function cardHtml(b) {
+        var contact = [];
+        if (b.email) contact.push('<a href="mailto:' + esc(b.email) + '">' + esc(b.email) + "</a>");
+        if (b.phone) contact.push('<a href="tel:' + esc(b.phone) + '">' + esc(b.phone) + "</a>");
+
+        var service = b.interestedService
+          ? '<span class="service-tag">' + esc(b.interestedService) + "</span>" : "";
+
+        var current = statusFor(b.id);
+        var options = STATUSES.map(function (s) {
+          return '<option value="' + s + '"' + (s === current ? " selected" : "") +
+            ">" + STATUS_LABEL[s] + "</option>";
+        }).join("");
+
+        return '<article class="booking-card" data-status="' + current + '" data-id="' + esc(b.id) + '">' +
+          '<div class="booking-top"><span class="booking-name">' + esc(b.fullName) + " " + service +
+          '</span><span class="booking-date">' + esc(fmtDate(b.createdAt)) + "</span></div>" +
+          '<div class="booking-status"><span class="status-dot"></span>' +
+          '<select class="status-select" data-id="' + esc(b.id) + '">' + options + "</select></div>" +
+          '<div class="booking-contact">' + contact.join("") + "</div>" +
+          '<div class="booking-grid">' +
+          field("Current Situation", b.currentHairState) +
+          field("Goals", b.beautyGoals) +
+          field("Inspiration Photos", b.inspirationPhotos) +
+          field("Preferred Days / Times", b.preferredDays) +
+          field("Notes", b.additionalNotes) +
+          "</div></article>";
+      }
+
+      function openDashboard() {
+        show(gate, false);
+        show(document.getElementById("reset"), false);
+        show(dash, true);
+      }
+      function showReset() {
+        show(gate, false);
+        show(dash, false);
+        show(document.getElementById("reset"), true);
+      }
+
+      // Try a password against the auth function.
+      // Returns "ok" | "reset" (must choose a new password) | "bad" | "error".
+      async function doLogin(pw) {
+        var r;
+        try {
+          r = await fetch("/.netlify/functions/auth", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ action: "login", password: pw }),
+          });
+        } catch (e) { return "error"; }
+ 
