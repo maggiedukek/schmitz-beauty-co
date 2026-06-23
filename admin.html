@@ -389,4 +389,106 @@
             body: JSON.stringify({ action: "login", password: pw }),
           });
         } catch (e) { return "error"; }
- 
+        if (r.status === 401) return "bad";
+        if (!r.ok) return "error";
+        var data = await r.json();
+        sessionStorage.setItem(KEY, pw);
+        return data.mustReset ? "reset" : "ok";
+      }
+
+      // -------- Wire up --------
+      document.getElementById("gateForm").addEventListener("submit", async function (e) {
+        e.preventDefault();
+        var pw = document.getElementById("pw").value;
+        var err = document.getElementById("gateErr");
+        err.textContent = "";
+        var result = await doLogin(pw);
+        if (result === "ok") { await load(pw); openDashboard(); }
+        else if (result === "reset") { showReset(); }
+        else if (result === "bad") { err.textContent = "Incorrect password. Try again."; }
+        else { err.textContent = "Couldn't reach the server. Try again in a moment."; }
+      });
+
+      // First-login: save the new password Brenna chooses.
+      document.getElementById("resetForm").addEventListener("submit", async function (e) {
+        e.preventDefault();
+        var err = document.getElementById("resetErr");
+        err.textContent = "";
+        var p1 = document.getElementById("np1").value;
+        var p2 = document.getElementById("np2").value;
+        if (p1.length < 6) { err.textContent = "Use at least 6 characters."; return; }
+        if (p1 !== p2) { err.textContent = "The two passwords don't match."; return; }
+        var r;
+        try {
+          r = await fetch("/.netlify/functions/auth", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              action: "set-password",
+              password: sessionStorage.getItem(KEY) || "",
+              newPassword: p1,
+            }),
+          });
+        } catch (e) { err.textContent = "Couldn't reach the server."; return; }
+        if (!r.ok) {
+          var m = "Couldn't save. Try again.";
+          try { m = (await r.json()).error || m; } catch (e2) {}
+          err.textContent = m; return;
+        }
+        sessionStorage.setItem(KEY, p1);
+        await load(p1);
+        openDashboard();
+      });
+
+      document.getElementById("search").addEventListener("input", render);
+
+      // Change a request's status (event delegation — cards are re-rendered).
+      // setStatus saves to Baserow and re-renders on its own.
+      document.getElementById("content").addEventListener("change", function (e) {
+        var sel = e.target.closest && e.target.closest(".status-select");
+        if (!sel) return;
+        setStatus(sel.getAttribute("data-id"), sel.value);
+      });
+
+      // Filter chips.
+      document.getElementById("filters").addEventListener("click", function (e) {
+        var chip = e.target.closest && e.target.closest(".chip");
+        if (!chip) return;
+        activeFilter = chip.getAttribute("data-filter");
+        Array.prototype.forEach.call(this.querySelectorAll(".chip"), function (c) {
+          c.classList.toggle("is-active", c === chip);
+        });
+        render();
+      });
+
+      document.getElementById("refreshBtn").addEventListener("click", function () {
+        load(sessionStorage.getItem(KEY) || "");
+      });
+
+      document.getElementById("logoutBtn").addEventListener("click", function () {
+        sessionStorage.removeItem(KEY);
+        location.reload();
+      });
+
+      // Preview mode: skip the gate, show sample data so the dashboard is visible.
+      if (PREVIEW) {
+        document.getElementById("previewBanner").hidden = false;
+        allBookings = SAMPLE_BOOKINGS;
+        openDashboard();
+        render();
+        return;
+      }
+
+      // Auto-open if we already have a key this session.
+      var saved = sessionStorage.getItem(KEY);
+      if (saved) {
+        doLogin(saved).then(function (result) {
+          if (result === "ok") { load(saved).then(function () { openDashboard(); }); }
+          else if (result === "reset") { showReset(); }
+          else { sessionStorage.removeItem(KEY); }
+        });
+      }
+    })();
+  </script>
+</body>
+</html>

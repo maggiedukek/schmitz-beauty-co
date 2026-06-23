@@ -12,3 +12,11 @@
   from = "/admin"
   to = "/admin.html"
   status = 200
+
+# Also serve the dashboard at admin.schmitzbeautyco.com — any path on that
+# subdomain shows the dashboard. (Add the subdomain in Netlify → Domain management.)
+[[redirects]]
+  from = "https://admin.schmitzbeautyco.com/*"
+  to = "/admin.html"
+  status = 200
+  force = true

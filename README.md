@@ -125,4 +125,27 @@ automatically** in a couple of minutes. To update:
 2. Click the pencil ✏️ icon, paste the new version, click **Commit changes**.
 3. Netlify rebuilds and the live site updates on its own. Refresh the page to see it.
 
-(When I send you updated code, you'll just replace `App.js` this way.
+(When I send you updated code, you'll just replace `App.js` this way.)
+
+---
+
+## Want to preview it on your own computer first? (optional)
+
+If you ever install Node.js (https://nodejs.org), you can run it locally:
+
+```
+npm install
+npm run web
+```
+
+This is optional — Netlify builds it for you either way.
+
+---
+
+## Quick reference
+
+| Thing | Where |
+|------|-------|
+| Your code | GitHub repository `schmitz-beauty-co` |
+| The live website | Your Netlify site link |
+| The file you'll edit most | `App.js` |
