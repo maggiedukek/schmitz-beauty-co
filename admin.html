@@ -3,11 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
   <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32.png" />
   <link rel="icon" type="image/png" href="images/favicon.png" />
   <link rel="apple-touch-icon" href="images/apple-touch-icon.png" />
-
-  <meta name="robots" content="noindex, nofollow" />
   <title>Brenna's Dashboard — Schmitz Beauty Co.</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -179,33 +178,57 @@
     .expense-notes { color: #e8e8ea; font-size: 14px; white-space: pre-wrap; }
 
     /* Inventory items */
-    .inv-list { display: flex; flex-direction: column; gap: 12px; }
+    .inv-list { display: flex; flex-direction: column; gap: 14px; }
     .inv-card {
-      display: flex; gap: 16px; align-items: center; justify-content: space-between;
       background: var(--dark-alt); border: 1px solid rgba(255,255,255,0.08);
-      border-left: 4px solid #2bb673; border-radius: var(--radius); padding: 14px 18px;
+      border-left: 4px solid #2bb673; border-radius: var(--radius); padding: 16px 18px;
     }
     .inv-card[data-low="true"] { border-left-color: var(--red); }
-    .inv-main { min-width: 0; }
-    .inv-top { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .inv-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+    .inv-title { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
     .inv-name { font-size: 16px; font-weight: 700; color: #fff; }
+    .inv-swatch { width: 14px; height: 14px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.35); flex: 0 0 auto; }
     .inv-low-badge {
       display: none; background: rgba(179,38,30,0.18); color: #ff8b84;
       border: 1px solid rgba(179,38,30,0.55); border-radius: 999px; padding: 2px 10px;
       font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em;
     }
     .inv-card[data-low="true"] .inv-low-badge { display: inline-block; }
-    .inv-sub { color: var(--muted); font-size: 12px; margin-top: 3px; }
-    .inv-notes { color: #cfcfd4; font-size: 13px; margin-top: 4px; white-space: pre-wrap; }
-    .inv-qty { display: flex; align-items: center; gap: 10px; flex: 0 0 auto; }
-    .qty-btn {
-      width: 34px; height: 34px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.2);
-      background: var(--dark); color: #fff; font-size: 18px; line-height: 1; cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
+    .inv-amount { font-family: var(--serif); font-size: 20px; color: #fff; white-space: nowrap; text-align: right; }
+    .inv-amount .unit { font-family: var(--sans); font-size: 12px; color: var(--muted); margin-left: 3px; }
+    .inv-sub { color: var(--muted); font-size: 12px; margin-top: 2px; }
+    .inv-notes { color: #cfcfd4; font-size: 13px; margin-top: 8px; white-space: pre-wrap; }
+    .inv-bar { height: 8px; background: rgba(255,255,255,0.1); border-radius: 999px; overflow: hidden; margin: 12px 0 2px; }
+    .inv-bar > span { display: block; height: 100%; background: #2bb673; border-radius: 999px; transition: width .2s; }
+    .inv-card[data-low="true"] .inv-bar > span { background: var(--red); }
+    .inv-controls { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-top: 12px; }
+    .level-btn {
+      background: var(--dark); border: 1px solid rgba(255,255,255,0.18); color: #fff;
+      border-radius: 8px; padding: 7px 12px; font: inherit; font-size: 13px; font-weight: 600; cursor: pointer;
     }
-    .qty-btn:hover { border-color: var(--teal); color: var(--teal); }
-    .qty-num { font-family: var(--serif); font-size: 24px; color: #fff; min-width: 30px; text-align: center; }
-    .qty-unit { color: var(--muted); font-size: 12px; min-width: 40px; }
+    .level-btn:hover { border-color: var(--teal); color: var(--teal); }
+    .level-btn.is-current { background: var(--teal); border-color: var(--teal); color: #04302f; }
+    .use-input {
+      width: 88px; padding: 8px 10px; border-radius: 8px; font: inherit;
+      border: 1px solid rgba(255,255,255,0.18); background: var(--dark); color: #fff;
+    }
+    .inv-btn {
+      background: var(--dark); border: 1px solid rgba(255,255,255,0.18); color: #fff;
+      border-radius: 8px; padding: 8px 14px; font: inherit; font-size: 13px; font-weight: 600; cursor: pointer;
+    }
+    .inv-btn:hover { border-color: var(--teal); color: var(--teal); }
+    .inv-btn.refill:hover { border-color: #2bb673; color: #2bb673; }
+
+    /* Inventory add-form extras */
+    .mode-toggle { display: flex; gap: 8px; flex-wrap: wrap; }
+    .mode-opt {
+      background: var(--dark); border: 1px solid rgba(255,255,255,0.18); color: var(--muted);
+      border-radius: 8px; padding: 9px 14px; font: inherit; font-size: 13px; font-weight: 600; cursor: pointer;
+    }
+    .mode-opt.is-active { background: var(--teal); border-color: var(--teal); color: #04302f; }
+    .swatch-toggle { display: flex; align-items: center; gap: 8px; color: var(--muted); font-size: 13px; cursor: pointer; }
+    .swatch-toggle input { width: auto; }
+    input[type="color"]#ivSwatch { width: 52px; height: 38px; padding: 2px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.18); background: var(--dark); cursor: pointer; vertical-align: middle; margin-left: 10px; }
 
     /* Login gate */
     .gate { max-width: 380px; margin: 12vh auto; padding: 0 20px; text-align: center; }
@@ -360,4 +383,1059 @@
 
     <!-- ===================== Inventory view ===================== -->
     <section id="view-inventory" hidden>
-      <div class="dash-head
+      <div class="dash-head">
+        <div>
+          <h1>Inventory</h1>
+          <p>Track your supplies — items turn red when they hit their reorder point.</p>
+        </div>
+        <div class="dash-head-actions">
+          <button class="btn btn-primary" id="addItemBtn">+ Add Item</button>
+        </div>
+      </div>
+
+      <form class="receipt-form" id="itemForm" hidden>
+        <div class="rf-fields">
+          <div class="field">
+            <label>How do you want to track it?</label>
+            <div class="mode-toggle" id="ivModeToggle">
+              <button type="button" class="mode-opt is-active" data-mode="level">By level (eyeball it)</button>
+              <button type="button" class="mode-opt" data-mode="amount">By amount (measured)</button>
+            </div>
+          </div>
+          <div class="field">
+            <label for="ivName">Item name</label>
+            <input id="ivName" type="text" placeholder="e.g. Danger Jones Pewter" />
+          </div>
+          <div class="rf-row">
+            <div class="field">
+              <label for="ivCategory">Category</label>
+              <select id="ivCategory"></select>
+            </div>
+            <div class="field">
+              <label for="ivBrand">Brand (optional)</label>
+              <input id="ivBrand" type="text" placeholder="e.g. Danger Jones" />
+            </div>
+          </div>
+          <div class="rf-row" id="ivAmountRow" hidden>
+            <div class="field">
+              <label for="ivFull">Full container holds</label>
+              <input id="ivFull" type="number" min="0" step="0.1" inputmode="decimal" placeholder="8" />
+            </div>
+            <div class="field">
+              <label for="ivUnit">Unit</label>
+              <input id="ivUnit" type="text" placeholder="oz, ml, g…" />
+            </div>
+          </div>
+          <div class="field">
+            <label for="ivAlert" id="ivAlertLabel">Alert when running low (optional)</label>
+            <input id="ivAlert" type="number" min="0" step="0.1" inputmode="decimal" placeholder="defaults to a quarter left" />
+          </div>
+          <div class="field">
+            <label class="swatch-toggle">
+              <input type="checkbox" id="ivHasSwatch" /> This is a color — add a swatch
+              <input id="ivSwatch" type="color" value="#b3261e" hidden />
+            </label>
+          </div>
+          <div class="field">
+            <label for="ivNotes">Notes</label>
+            <textarea id="ivNotes" placeholder="Supplier, shade, etc."></textarea>
+          </div>
+        </div>
+        <div class="rf-actions">
+          <span class="rf-err" id="ivErr"></span>
+          <button type="button" class="btn btn-secondary" id="ivCancel">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="ivSave">Save Item</button>
+        </div>
+      </form>
+
+      <div class="dash-stats" id="inventoryStats"></div>
+
+      <div class="dash-toolbar">
+        <input class="dash-search" id="invSearch" type="search" placeholder="Search items…" />
+      </div>
+      <div class="dash-toolbar">
+        <div class="filter-chips" id="inventoryFilters"></div>
+      </div>
+
+      <div id="inventoryContent"></div>
+    </section>
+  </main>
+
+  <script>
+    (function () {
+      var KEY = "sbc_dashboard_key";
+      var STATUS_KEY = "sbc_booking_status";
+      var STATUSES = ["new", "contacted", "booked", "closed"];
+      var STATUS_LABEL = { new: "New", contacted: "Contacted", booked: "Booked", closed: "Closed" };
+      var gate = document.getElementById("gate");
+      var dash = document.getElementById("dash");
+      var allBookings = [];
+      var activeFilter = "all";
+
+      // Receipts / expenses state
+      var CATEGORIES = ["Supplies", "Booth Rent", "Tools & Equipment", "Education", "Marketing", "Travel", "Other"];
+      var allExpenses = [];
+      var receiptFilter = "all";
+      var receiptsLoaded = false;
+      var pendingPhoto = null; // { dataUrl, name }
+      var activeTab = "requests";
+
+      // Inventory state
+      var INV_CATEGORIES = ["Color", "Lash", "Nails", "Waxing", "Skincare", "Tools", "Retail", "Other"];
+      var LEVELS = [
+        { frac: 1, label: "Full" },
+        { frac: 0.75, label: "¾" },
+        { frac: 0.5, label: "½" },
+        { frac: 0.25, label: "¼" },
+        { frac: 0, label: "Empty" },
+      ];
+      var allSupplies = [];
+      var inventoryFilter = "all";
+      var inventoryLoaded = false;
+      var currentItemMode = "level";
+
+      // ---- Preview mode ----
+      // When the page runs locally (or with ?preview in the URL) we skip the
+      // password and show sample bookings, so the dashboard can be built out
+      // without a live backend. On the real Netlify site this is false, so the
+      // password gate and real data apply.
+      var PREVIEW =
+        location.hostname === "localhost" ||
+        location.hostname === "127.0.0.1" ||
+        location.search.indexOf("preview") !== -1;
+
+      var SAMPLE_BOOKINGS = [
+        { id: "s1", createdAt: "2026-06-21T14:10:00Z", fullName: "Jordan Lee", email: "jordan@example.com", phone: "555-123-4567", interestedService: "Vivid Color", currentHairState: "Box-dyed dark brown, grown out about 3 inches.", beautyGoals: "Go a bright copper for summer.", inspirationPhotos: "Yes — can text them over.", preferredDays: "Weekday evenings", additionalNotes: "Sensitive to ammonia." },
+        { id: "s2", createdAt: "2026-06-20T19:30:00Z", fullName: "Sam Rivera", email: "sam.rivera@example.com", phone: "555-988-2210", interestedService: "Lash Extensions", currentHairState: "", beautyGoals: "Natural-looking volume set for a wedding.", inspirationPhotos: "Can send later", preferredDays: "Flexible", additionalNotes: "" },
+        { id: "s3", createdAt: "2026-06-18T16:00:00Z", fullName: "Alex Kim", email: "alexk@example.com", phone: "555-776-0098", interestedService: "Nails", currentHairState: "", beautyGoals: "Gel set, almond shape, neutral tones.", inspirationPhotos: "No", preferredDays: "Saturdays", additionalNotes: "First time — a little nervous!" },
+        { id: "s4", createdAt: "2026-06-12T13:45:00Z", fullName: "Taylor Brooks", email: "taylor.b@example.com", phone: "", interestedService: "Facials", currentHairState: "", beautyGoals: "Brightening facial, some congestion on the chin.", inspirationPhotos: "", preferredDays: "Weekday mornings", additionalNotes: "" }
+      ];
+
+      var SAMPLE_EXPENSES = [
+        { id: "e1", createdAt: "2026-06-20T00:00:00Z", vendor: "Sally Beauty", amount: 84.32, date: "2026-06-20", category: "Supplies", notes: "Developer + 3 tubes of color.", receiptUrl: "https://i.imgur.com/c68mqDK.png" },
+        { id: "e2", createdAt: "2026-06-15T00:00:00Z", vendor: "Simplicity Salon", amount: 250.00, date: "2026-06-15", category: "Booth Rent", notes: "June booth rent.", receiptUrl: "" },
+        { id: "e3", createdAt: "2026-06-08T00:00:00Z", vendor: "Amazon", amount: 39.99, date: "2026-06-08", category: "Tools & Equipment", notes: "Lash tweezers set.", receiptUrl: "" }
+      ];
+
+      var SAMPLE_SUPPLIES = [
+        { id: "i1", name: "Danger Jones Pewter", category: "Color", mode: "amount", unit: "oz", full: 8, remaining: 2, alertAt: 2, brand: "Danger Jones", swatch: "#7d7f86", notes: "Cool steel grey" },
+        { id: "i2", name: "20 vol developer", category: "Color", mode: "amount", unit: "oz", full: 32, remaining: 7, alertAt: 8, brand: "Wella", swatch: "", notes: "" },
+        { id: "i3", name: "Lash adhesive", category: "Lash", mode: "level", unit: "", full: 100, remaining: 75, alertAt: 0, brand: "", swatch: "", notes: "" },
+        { id: "i4", name: "Foiling tape", category: "Color", mode: "level", unit: "", full: 100, remaining: 25, alertAt: 0, brand: "", swatch: "", notes: "Pop-up foils" }
+      ];
+
+      // Per-request status now lives in Baserow, so changes sync across every
+      // device Brenna uses (phone, laptop) instead of being stuck in one browser.
+      function leadById(id) {
+        for (var i = 0; i < allBookings.length; i++) {
+          if (String(allBookings[i].id) === String(id)) return allBookings[i];
+        }
+        return null;
+      }
+      function statusFor(id) {
+        var l = leadById(id);
+        return (l && l.status) ? l.status : "new";
+      }
+      async function setStatus(id, value) {
+        var l = leadById(id);
+        var prev = l ? l.status : "new";
+        if (l) l.status = value; // optimistic update
+        render();
+
+        if (PREVIEW) return; // no backend in preview mode
+
+        try {
+          var res = await fetch("/.netlify/functions/leads", {
+            method: "PATCH",
+            headers: {
+              "Content-Type": "application/json",
+              "x-dashboard-key": sessionStorage.getItem(KEY) || "",
+            },
+            body: JSON.stringify({ id: id, status: value }),
+          });
+          if (!res.ok) throw new Error("save failed");
+        } catch (e) {
+          if (l) l.status = prev; // roll back on failure
+          render();
+          alert("Couldn't save that change. Check your connection and try again.");
+        }
+      }
+
+      function esc(str) {
+        return String(str == null ? "" : str)
+          .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+      }
+
+      function fmtDate(iso) {
+        if (!iso) return "—";
+        var d = new Date(iso);
+        if (isNaN(d)) return iso;
+        return d.toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" }) +
+          " · " + d.toLocaleTimeString(undefined, { hour: "numeric", minute: "2-digit" });
+      }
+
+      function show(el, on) { el.hidden = !on; }
+
+      async function load(key) {
+        var content = document.getElementById("content");
+        content.innerHTML = '<div class="dash-state">Loading requests…</div>';
+        var res;
+        try {
+          res = await fetch("/.netlify/functions/leads", {
+            headers: { "x-dashboard-key": key },
+          });
+        } catch (e) {
+          content.innerHTML = '<div class="dash-state"><h3>Network error</h3><p>Could not reach the server.</p></div>';
+          return false;
+        }
+
+        if (res.status === 401) return false; // wrong password
+        if (!res.ok) {
+          var msg = "Something went wrong.";
+          try { msg = (await res.json()).error || msg; } catch (e) {}
+          content.innerHTML = '<div class="dash-state"><h3>Couldn\'t load requests</h3><p>' + esc(msg) + '</p></div>';
+          return true; // authenticated, but a server-side issue
+        }
+
+        var data = await res.json();
+        allBookings = data.submissions || [];
+        render();
+        return true;
+      }
+
+      function renderStats() {
+        var stats = document.getElementById("stats");
+        var now = new Date();
+        var sevenDaysAgo = new Date(now.getTime() - 7 * 864e5);
+        var recent = allBookings.filter(function (b) {
+          var d = new Date(b.createdAt);
+          return !isNaN(d) && d >= sevenDaysAgo;
+        }).length;
+        var newCount = allBookings.filter(function (b) {
+          return statusFor(b.id) === "new";
+        }).length;
+        var services = {}; // key: lowercased, value: { count, label }
+        allBookings.forEach(function (b) {
+          var s = (b.interestedService || "").trim();
+          if (!s) return;
+          var k = s.toLowerCase();
+          if (!services[k]) services[k] = { count: 0, label: s };
+          services[k].count++;
+        });
+        var topService = "—";
+        var max = 0;
+        Object.keys(services).forEach(function (k) {
+          if (services[k].count > max) { max = services[k].count; topService = services[k].label; }
+        });
+
+        stats.innerHTML =
+          card(allBookings.length, "Total Requests") +
+          card(newCount, "New / Unhandled") +
+          card(recent, "Last 7 Days") +
+          card(topService, "Top Service");
+
+        function card(num, label) {
+          return '<div class="stat-card"><div class="num">' + esc(num) +
+            '</div><div class="label">' + esc(label) + '</div></div>';
+        }
+      }
+
+      function render() {
+        renderStats();
+        var q = (document.getElementById("search").value || "").toLowerCase().trim();
+        var list = allBookings.filter(function (b) {
+          if (activeFilter !== "all" && statusFor(b.id) !== activeFilter) return false;
+          if (!q) return true;
+          return (b.fullName + " " + b.email + " " + b.interestedService).toLowerCase().indexOf(q) !== -1;
+        });
+
+        var content = document.getElementById("content");
+        if (!allBookings.length) {
+          content.innerHTML = '<div class="dash-state"><h3>No requests yet</h3><p>New consultation requests from your website will appear here.</p></div>';
+          return;
+        }
+        if (!list.length) {
+          content.innerHTML = '<div class="dash-state"><h3>No matches</h3><p>Try a different search.</p></div>';
+          return;
+        }
+
+        content.innerHTML = '<div class="booking-list">' + list.map(cardHtml).join("") + "</div>";
+      }
+
+      function field(k, v) {
+        if (!v || !String(v).trim()) return "";
+        return '<div class="booking-field"><div class="k">' + esc(k) +
+          '</div><div class="v">' + esc(v) + "</div></div>";
+      }
+
+      function cardHtml(b) {
+        var contact = [];
+        if (b.email) contact.push('<a href="mailto:' + esc(b.email) + '">' + esc(b.email) + "</a>");
+        if (b.phone) contact.push('<a href="tel:' + esc(b.phone) + '">' + esc(b.phone) + "</a>");
+
+        var service = b.interestedService
+          ? '<span class="service-tag">' + esc(b.interestedService) + "</span>" : "";
+
+        var current = statusFor(b.id);
+        var options = STATUSES.map(function (s) {
+          return '<option value="' + s + '"' + (s === current ? " selected" : "") +
+            ">" + STATUS_LABEL[s] + "</option>";
+        }).join("");
+
+        return '<article class="booking-card" data-status="' + current + '" data-id="' + esc(b.id) + '">' +
+          '<div class="booking-top"><span class="booking-name">' + esc(b.fullName) + " " + service +
+          '</span><span class="booking-date">' + esc(fmtDate(b.createdAt)) + "</span></div>" +
+          '<div class="booking-status"><span class="status-dot"></span>' +
+          '<select class="status-select" data-id="' + esc(b.id) + '">' + options + "</select></div>" +
+          '<div class="booking-contact">' + contact.join("") + "</div>" +
+          '<div class="booking-grid">' +
+          field("Current Situation", b.currentHairState) +
+          field("Goals", b.beautyGoals) +
+          field("Inspiration Photos", b.inspirationPhotos) +
+          field("Preferred Days / Times", b.preferredDays) +
+          field("Notes", b.additionalNotes) +
+          "</div></article>";
+      }
+
+      // =====================================================================
+      //  Receipts & Expenses
+      // =====================================================================
+      function money(n) {
+        var v = Number(n);
+        if (isNaN(v)) return "$0.00";
+        return "$" + v.toFixed(2);
+      }
+
+      function fmtDay(d) {
+        if (!d) return "—";
+        var dt = new Date(String(d).slice(0, 10) + "T00:00:00");
+        if (isNaN(dt)) return d;
+        return dt.toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" });
+      }
+
+      function populateReceiptControls() {
+        var sel = document.getElementById("rfCategory");
+        if (sel && !sel.options.length) {
+          CATEGORIES.forEach(function (c) {
+            var o = document.createElement("option");
+            o.value = c; o.textContent = c; sel.appendChild(o);
+          });
+        }
+        var filters = document.getElementById("receiptFilters");
+        if (filters && !filters.children.length) {
+          filters.innerHTML = ["all"].concat(CATEGORIES).map(function (c) {
+            return '<button class="chip' + (c === "all" ? " is-active" : "") +
+              '" data-cat="' + esc(c) + '">' + (c === "all" ? "All" : esc(c)) + "</button>";
+          }).join("");
+        }
+        var dateEl = document.getElementById("rfDate");
+        if (dateEl && !dateEl.value) {
+          var t = new Date();
+          dateEl.value = t.getFullYear() + "-" +
+            String(t.getMonth() + 1).padStart(2, "0") + "-" +
+            String(t.getDate()).padStart(2, "0");
+        }
+      }
+
+      async function loadExpenses(key) {
+        var content = document.getElementById("receiptContent");
+        content.innerHTML = '<div class="dash-state">Loading receipts…</div>';
+        if (PREVIEW) {
+          allExpenses = SAMPLE_EXPENSES.slice();
+          receiptsLoaded = true;
+          renderReceipts();
+          return;
+        }
+        try {
+          var res = await fetch("/.netlify/functions/expenses", { headers: { "x-dashboard-key": key } });
+          if (!res.ok) {
+            var msg = "Couldn't load receipts.";
+            try { msg = (await res.json()).error || msg; } catch (e) {}
+            content.innerHTML = '<div class="dash-state"><h3>Couldn\'t load receipts</h3><p>' + esc(msg) + '</p></div>';
+            return;
+          }
+          var data = await res.json();
+          allExpenses = data.expenses || [];
+          receiptsLoaded = true;
+          renderReceipts();
+        } catch (e) {
+          content.innerHTML = '<div class="dash-state"><h3>Network error</h3><p>Could not reach the server.</p></div>';
+        }
+      }
+
+      function renderReceiptStats() {
+        var stats = document.getElementById("receiptStats");
+        var total = 0, monthTotal = 0;
+        var now = new Date();
+        var ym = now.getFullYear() + "-" + String(now.getMonth() + 1).padStart(2, "0");
+        var cats = {};
+        allExpenses.forEach(function (e) {
+          var amt = Number(e.amount) || 0;
+          total += amt;
+          if (String(e.date || "").indexOf(ym) === 0) monthTotal += amt;
+          var c = (e.category || "").trim();
+          if (c) cats[c] = (cats[c] || 0) + amt;
+        });
+        var topCat = "—", max = 0;
+        Object.keys(cats).forEach(function (k) { if (cats[k] > max) { max = cats[k]; topCat = k; } });
+        stats.innerHTML =
+          card(money(total), "Total Spent") +
+          card(money(monthTotal), "This Month") +
+          card(allExpenses.length, "Receipts") +
+          card(topCat, "Top Category");
+        function card(num, label) {
+          return '<div class="stat-card"><div class="num">' + esc(num) +
+            '</div><div class="label">' + esc(label) + '</div></div>';
+        }
+      }
+
+      function expenseCardHtml(e) {
+        var thumb = e.receiptUrl
+          ? '<img class="expense-thumb" src="' + esc(e.receiptUrl) +
+            '" alt="Receipt" onclick="window.open(this.src,\'_blank\')" />'
+          : '<div class="expense-thumb placeholder" title="No photo">🧾</div>';
+        var cat = e.category ? '<span class="cat-tag">' + esc(e.category) + "</span>" : "";
+        var notes = e.notes ? '<div class="expense-notes">' + esc(e.notes) + "</div>" : "";
+        return '<article class="expense-card">' + thumb +
+          '<div class="expense-main">' +
+            '<div class="expense-top"><span class="expense-vendor">' + esc(e.vendor || "—") +
+            '</span><span class="expense-amount">' + esc(money(e.amount)) + "</span></div>" +
+            '<div class="expense-meta">' + esc(fmtDay(e.date)) + (cat ? " " + cat : "") + "</div>" +
+            notes +
+          "</div></article>";
+      }
+
+      function renderReceipts() {
+        populateReceiptControls();
+        renderReceiptStats();
+        var content = document.getElementById("receiptContent");
+        if (!allExpenses.length) {
+          content.innerHTML = '<div class="dash-state"><h3>No receipts yet</h3><p>Tap “Add Receipt” to log your first expense.</p></div>';
+          return;
+        }
+        var list = allExpenses.filter(function (e) {
+          return receiptFilter === "all" || (e.category || "") === receiptFilter;
+        });
+        if (!list.length) {
+          content.innerHTML = '<div class="dash-state"><h3>No receipts in this category</h3></div>';
+          return;
+        }
+        content.innerHTML = '<div class="expense-list">' + list.map(expenseCardHtml).join("") + "</div>";
+      }
+
+      function resetReceiptForm() {
+        document.getElementById("receiptForm").hidden = true;
+        document.getElementById("rfVendor").value = "";
+        document.getElementById("rfAmount").value = "";
+        if (document.getElementById("rfCategory").options.length) document.getElementById("rfCategory").selectedIndex = 0;
+        document.getElementById("rfNotes").value = "";
+        document.getElementById("rfPhoto").value = "";
+        document.getElementById("rfDate").value = "";
+        var p = document.getElementById("rfPreview"); p.hidden = true; p.src = "";
+        document.getElementById("rfErr").textContent = "";
+        pendingPhoto = null;
+        populateReceiptControls();
+      }
+
+      async function saveReceipt(ev) {
+        ev.preventDefault();
+        var err = document.getElementById("rfErr"); err.textContent = "";
+        var vendor = (document.getElementById("rfVendor").value || "").trim();
+        var amount = (document.getElementById("rfAmount").value || "").trim();
+        var date = document.getElementById("rfDate").value;
+        var category = document.getElementById("rfCategory").value;
+        var notes = (document.getElementById("rfNotes").value || "").trim();
+        if (!amount && !vendor && !pendingPhoto) {
+          err.textContent = "Add at least a photo or an amount."; return;
+        }
+
+        var saveBtn = document.getElementById("rfSave");
+        var orig = saveBtn.textContent;
+        saveBtn.disabled = true; saveBtn.textContent = "Saving…";
+        try {
+          if (PREVIEW) {
+            allExpenses.unshift({
+              id: "local" + Date.now(), createdAt: new Date().toISOString(),
+              vendor: vendor, amount: amount, date: date, category: category, notes: notes,
+              receiptUrl: pendingPhoto ? pendingPhoto.dataUrl : "",
+            });
+          } else {
+            var payload = { vendor: vendor, amount: amount, date: date, category: category, notes: notes };
+            if (pendingPhoto) { payload.imageBase64 = pendingPhoto.dataUrl; payload.imageName = pendingPhoto.name; }
+            var res = await fetch("/.netlify/functions/expenses", {
+              method: "POST",
+              headers: { "Content-Type": "application/json", "x-dashboard-key": sessionStorage.getItem(KEY) || "" },
+              body: JSON.stringify(payload),
+            });
+            if (!res.ok) {
+              var m = "Couldn't save.";
+              try { m = (await res.json()).error || m; } catch (e) {}
+              throw new Error(m);
+            }
+            var data = await res.json();
+            allExpenses.unshift(data.expense);
+          }
+          resetReceiptForm();
+          renderReceipts();
+        } catch (e) {
+          err.textContent = e.message || "Couldn't save. Try again.";
+        } finally {
+          saveBtn.disabled = false; saveBtn.textContent = orig;
+        }
+      }
+
+      // Download every expense as a CSV she can hand to her accountant at tax time.
+      function csvCell(v) {
+        v = String(v == null ? "" : v);
+        return /[",\n\r]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v;
+      }
+      function exportExpensesCsv() {
+        if (!allExpenses.length) { alert("No receipts to download yet."); return; }
+        var data = allExpenses.slice().sort(function (a, b) {
+          return String(a.date || "").localeCompare(String(b.date || ""));
+        });
+        var rows = [["Date", "Vendor", "Amount", "Category", "Notes", "Receipt"]];
+        var total = 0;
+        data.forEach(function (e) {
+          var amt = (e.amount === "" || e.amount == null) ? "" : Number(e.amount);
+          if (amt !== "" && !isNaN(amt)) total += amt;
+          rows.push([e.date || "", e.vendor || "", amt === "" ? "" : amt.toFixed(2),
+            e.category || "", e.notes || "", e.receiptUrl || ""]);
+        });
+        rows.push([]);
+        rows.push(["", "TOTAL", total.toFixed(2), "", "", ""]);
+
+        var csv = rows.map(function (r) { return r.map(csvCell).join(","); }).join("\r\n");
+        // Prepend a BOM so Excel opens the £/accents correctly.
+        var blob = new Blob(["﻿" + csv], { type: "text/csv;charset=utf-8;" });
+        var url = URL.createObjectURL(blob);
+        var a = document.createElement("a");
+        a.href = url;
+        a.download = "schmitz-expenses-" + new Date().getFullYear() + ".csv";
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        setTimeout(function () { URL.revokeObjectURL(url); }, 1500);
+      }
+
+      // =====================================================================
+      //  Inventory
+      // =====================================================================
+      function supplyById(id) {
+        for (var i = 0; i < allSupplies.length; i++) {
+          if (String(allSupplies[i].id) === String(id)) return allSupplies[i];
+        }
+        return null;
+      }
+      function trimNum(n) {
+        var v = Number(n);
+        if (isNaN(v)) return "0";
+        return String(Math.round(v * 100) / 100);
+      }
+      // Mirror the backend: percent of full, low at/below Alert At (or a quarter).
+      function recompute(s) {
+        s.full = Number(s.full) || 0;
+        s.remaining = Number(s.remaining) || 0;
+        s.alertAt = Number(s.alertAt) || 0;
+        s.percent = s.full > 0 ? Math.round((s.remaining / s.full) * 100) : 0;
+        s.low = s.alertAt > 0 ? s.remaining <= s.alertAt : s.percent <= 25;
+      }
+
+      function populateInventoryControls() {
+        var sel = document.getElementById("ivCategory");
+        if (sel && !sel.options.length) {
+          INV_CATEGORIES.forEach(function (c) {
+            var o = document.createElement("option");
+            o.value = c; o.textContent = c; sel.appendChild(o);
+          });
+        }
+        var filters = document.getElementById("inventoryFilters");
+        if (filters && !filters.children.length) {
+          var chips = [
+            { k: "all", label: "All" },
+            { k: "low", label: "Low stock" },
+          ].concat(INV_CATEGORIES.map(function (c) { return { k: c, label: c }; }));
+          filters.innerHTML = chips.map(function (c) {
+            return '<button class="chip' + (c.k === "all" ? " is-active" : "") +
+              '" data-inv="' + esc(c.k) + '">' + esc(c.label) + "</button>";
+          }).join("");
+        }
+      }
+
+      async function loadInventory(key) {
+        var content = document.getElementById("inventoryContent");
+        content.innerHTML = '<div class="dash-state">Loading inventory…</div>';
+        if (PREVIEW) {
+          allSupplies = SAMPLE_SUPPLIES.slice();
+          allSupplies.forEach(recompute);
+          inventoryLoaded = true;
+          renderInventory();
+          return;
+        }
+        try {
+          var res = await fetch("/.netlify/functions/supplies", { headers: { "x-dashboard-key": key } });
+          if (!res.ok) {
+            var msg = "Couldn't load inventory.";
+            try { msg = (await res.json()).error || msg; } catch (e) {}
+            content.innerHTML = '<div class="dash-state"><h3>Couldn\'t load inventory</h3><p>' + esc(msg) + '</p></div>';
+            return;
+          }
+          var data = await res.json();
+          allSupplies = data.supplies || [];
+          allSupplies.forEach(recompute);
+          inventoryLoaded = true;
+          renderInventory();
+        } catch (e) {
+          content.innerHTML = '<div class="dash-state"><h3>Network error</h3><p>Could not reach the server.</p></div>';
+        }
+      }
+
+      function renderInventoryStats() {
+        var stats = document.getElementById("inventoryStats");
+        var low = 0, out = 0, cats = {};
+        allSupplies.forEach(function (s) {
+          if (s.low) low++;
+          if (Number(s.remaining) <= 0) out++;
+          var c = (s.category || "").trim();
+          if (c) cats[c] = true;
+        });
+        stats.innerHTML =
+          card(allSupplies.length, "Items Tracked") +
+          card(low, "Low Stock") +
+          card(out, "Out / Empty") +
+          card(Object.keys(cats).length, "Categories");
+        function card(num, label) {
+          return '<div class="stat-card"><div class="num">' + esc(num) +
+            '</div><div class="label">' + esc(label) + '</div></div>';
+        }
+      }
+
+      function supplyCardHtml(s) {
+        var low = !!s.low;
+        var pct = Math.max(0, Math.min(100, Number(s.percent) || 0));
+        var swatch = s.swatch ? '<span class="inv-swatch" style="background:' + esc(s.swatch) + '"></span>' : "";
+        var cat = s.category ? '<span class="cat-tag">' + esc(s.category) + "</span>" : "";
+
+        var amountLabel = s.mode === "amount"
+          ? esc(trimNum(s.remaining)) + ' <span class="unit">/ ' + esc(trimNum(s.full)) + " " + esc(s.unit || "") + "</span>"
+          : pct + '<span class="unit">%</span>';
+
+        var sub = [];
+        if (s.brand) sub.push(esc(s.brand));
+        if (s.mode === "amount" && s.alertAt > 0) sub.push("alert at " + esc(trimNum(s.alertAt)) + " " + esc(s.unit || ""));
+        var subHtml = sub.length ? '<div class="inv-sub">' + sub.join(" · ") + "</div>" : "";
+
+        var controls;
+        if (s.mode === "amount") {
+          controls =
+            '<input class="use-input" type="number" min="0" step="0.1" inputmode="decimal" placeholder="Used…" data-id="' + esc(s.id) + '" />' +
+            '<button class="inv-btn use-btn" data-id="' + esc(s.id) + '">Log use</button>' +
+            '<button class="inv-btn refill" data-act="refill" data-id="' + esc(s.id) + '">Refill</button>';
+        } else {
+          var nearest = Math.round(pct / 25) * 25;
+          controls = LEVELS.map(function (lv) {
+            var isCur = Math.round(lv.frac * 100) === nearest;
+            return '<button class="level-btn' + (isCur ? " is-current" : "") +
+              '" data-frac="' + lv.frac + '" data-id="' + esc(s.id) + '">' + lv.label + "</button>";
+          }).join("");
+        }
+
+        var notes = s.notes ? '<div class="inv-notes">' + esc(s.notes) + "</div>" : "";
+
+        return '<article class="inv-card" data-low="' + (low ? "true" : "false") + '" data-id="' + esc(s.id) + '">' +
+          '<div class="inv-head"><div class="inv-main">' +
+            '<div class="inv-title">' + swatch + '<span class="inv-name">' + esc(s.name || "—") + "</span>" + cat +
+            '<span class="inv-low-badge">Low</span></div>' + subHtml +
+          "</div>" +
+          '<div class="inv-amount">' + amountLabel + "</div></div>" +
+          '<div class="inv-bar"><span style="width:' + pct + '%"></span></div>' +
+          '<div class="inv-controls">' + controls + "</div>" +
+          notes +
+          "</article>";
+      }
+
+      function renderInventory() {
+        populateInventoryControls();
+        renderInventoryStats();
+        var content = document.getElementById("inventoryContent");
+        if (!allSupplies.length) {
+          content.innerHTML = '<div class="dash-state"><h3>No items yet</h3><p>Tap “Add Item” to start tracking your supplies.</p></div>';
+          return;
+        }
+        var q = (document.getElementById("invSearch").value || "").toLowerCase().trim();
+        var list = allSupplies.filter(function (s) {
+          if (inventoryFilter === "low") { if (!s.low) return false; }
+          else if (inventoryFilter !== "all" && (s.category || "") !== inventoryFilter) return false;
+          if (!q) return true;
+          return (s.name + " " + s.category + " " + s.brand + " " + s.notes).toLowerCase().indexOf(q) !== -1;
+        });
+        if (!list.length) {
+          content.innerHTML = '<div class="dash-state"><h3>No items match</h3></div>';
+          return;
+        }
+        content.innerHTML = '<div class="inv-list">' + list.map(supplyCardHtml).join("") + "</div>";
+      }
+
+      // Save a change to one item: optimistic update, then sync with the server.
+      async function patchSupply(id, body, optimistic) {
+        var s = supplyById(id);
+        if (!s) return;
+        var snap = JSON.parse(JSON.stringify(s));
+        optimistic(s);
+        recompute(s);
+        renderInventory();
+        if (PREVIEW) return;
+        try {
+          var res = await fetch("/.netlify/functions/supplies", {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json", "x-dashboard-key": sessionStorage.getItem(KEY) || "" },
+            body: JSON.stringify(Object.assign({ id: id }, body)),
+          });
+          if (!res.ok) throw new Error("save failed");
+          var data = await res.json();
+          if (data && data.supply) {
+            for (var k in data.supply) s[k] = data.supply[k];
+            recompute(s);
+            renderInventory();
+          }
+        } catch (e) {
+          for (var k2 in snap) s[k2] = snap[k2];
+          renderInventory();
+          alert("Couldn't save that change. Check your connection and try again.");
+        }
+      }
+      function setLevel(id, frac) {
+        var s = supplyById(id); if (!s) return;
+        var rem = Math.round((Number(s.full) || 0) * frac);
+        patchSupply(id, { remaining: rem }, function (x) { x.remaining = rem; });
+      }
+      function logUse(id, amt) {
+        if (!(amt > 0)) return;
+        patchSupply(id, { use: amt }, function (x) { x.remaining = Math.max(0, (Number(x.remaining) || 0) - amt); });
+      }
+      function refillItem(id) {
+        patchSupply(id, { refill: true }, function (x) { x.remaining = Number(x.full) || 0; });
+      }
+
+      function setItemMode(mode) {
+        currentItemMode = mode;
+        Array.prototype.forEach.call(document.querySelectorAll("#ivModeToggle .mode-opt"), function (b) {
+          b.classList.toggle("is-active", b.getAttribute("data-mode") === mode);
+        });
+        document.getElementById("ivAmountRow").hidden = (mode !== "amount");
+      }
+
+      function resetItemForm() {
+        document.getElementById("itemForm").hidden = true;
+        document.getElementById("ivName").value = "";
+        if (document.getElementById("ivCategory").options.length) document.getElementById("ivCategory").selectedIndex = 0;
+        document.getElementById("ivBrand").value = "";
+        document.getElementById("ivFull").value = "";
+        document.getElementById("ivUnit").value = "";
+        document.getElementById("ivAlert").value = "";
+        document.getElementById("ivNotes").value = "";
+        document.getElementById("ivHasSwatch").checked = false;
+        document.getElementById("ivSwatch").hidden = true;
+        document.getElementById("ivErr").textContent = "";
+        setItemMode("level");
+      }
+
+      async function saveItem(ev) {
+        ev.preventDefault();
+        var err = document.getElementById("ivErr"); err.textContent = "";
+        var name = (document.getElementById("ivName").value || "").trim();
+        if (!name) { err.textContent = "Give the item a name."; return; }
+        var category = document.getElementById("ivCategory").value;
+        var brand = (document.getElementById("ivBrand").value || "").trim();
+        var notes = (document.getElementById("ivNotes").value || "").trim();
+        var swatch = document.getElementById("ivHasSwatch").checked ? document.getElementById("ivSwatch").value : "";
+        var alertRaw = (document.getElementById("ivAlert").value || "").trim();
+        var alertAt = alertRaw === "" ? 0 : Number(alertRaw);
+
+        var mode = currentItemMode, full, unit;
+        if (mode === "amount") {
+          full = Number(document.getElementById("ivFull").value);
+          if (!(full > 0)) { err.textContent = "Enter how much a full container holds."; return; }
+          unit = (document.getElementById("ivUnit").value || "").trim();
+        } else {
+          full = 100; unit = "";
+        }
+
+        var payload = {
+          name: name, category: category, mode: mode, unit: unit,
+          full: full, remaining: full, alertAt: alertAt, brand: brand, swatch: swatch, notes: notes,
+        };
+
+        var saveBtn = document.getElementById("ivSave");
+        var orig = saveBtn.textContent;
+        saveBtn.disabled = true; saveBtn.textContent = "Saving…";
+        try {
+          var added;
+          if (PREVIEW) {
+            added = Object.assign({ id: "local" + Date.now() }, payload);
+          } else {
+            var res = await fetch("/.netlify/functions/supplies", {
+              method: "POST",
+              headers: { "Content-Type": "application/json", "x-dashboard-key": sessionStorage.getItem(KEY) || "" },
+              body: JSON.stringify(payload),
+            });
+            if (!res.ok) {
+              var m = "Couldn't save.";
+              try { m = (await res.json()).error || m; } catch (e) {}
+              throw new Error(m);
+            }
+            var data = await res.json();
+            added = data.supply || payload;
+          }
+          recompute(added);
+          allSupplies.unshift(added);
+          resetItemForm();
+          renderInventory();
+        } catch (e) {
+          err.textContent = e.message || "Couldn't save. Try again.";
+        } finally {
+          saveBtn.disabled = false; saveBtn.textContent = orig;
+        }
+      }
+
+      function switchTab(name) {
+        activeTab = name;
+        Array.prototype.forEach.call(document.querySelectorAll("#tabs .tab"), function (t) {
+          t.classList.toggle("is-active", t.getAttribute("data-tab") === name);
+        });
+        show(document.getElementById("view-requests"), name === "requests");
+        show(document.getElementById("view-receipts"), name === "receipts");
+        show(document.getElementById("view-inventory"), name === "inventory");
+        if (name === "receipts" && !receiptsLoaded) {
+          loadExpenses(sessionStorage.getItem(KEY) || "");
+        }
+        if (name === "inventory" && !inventoryLoaded) {
+          loadInventory(sessionStorage.getItem(KEY) || "");
+        }
+      }
+
+      function openDashboard() {
+        show(gate, false);
+        show(document.getElementById("reset"), false);
+        show(dash, true);
+      }
+      function showReset() {
+        show(gate, false);
+        show(dash, false);
+        show(document.getElementById("reset"), true);
+      }
+
+      // Try a password against the auth function.
+      // Returns "ok" | "reset" (must choose a new password) | "bad" | "error".
+      async function doLogin(pw) {
+        var r;
+        try {
+          r = await fetch("/.netlify/functions/auth", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ action: "login", password: pw }),
+          });
+        } catch (e) { return "error"; }
+        if (r.status === 401) return "bad";
+        if (!r.ok) return "error";
+        var data = await r.json();
+        sessionStorage.setItem(KEY, pw);
+        return data.mustReset ? "reset" : "ok";
+      }
+
+      // -------- Wire up --------
+      document.getElementById("gateForm").addEventListener("submit", async function (e) {
+        e.preventDefault();
+        var pw = document.getElementById("pw").value;
+        var err = document.getElementById("gateErr");
+        err.textContent = "";
+        var result = await doLogin(pw);
+        if (result === "ok") { await load(pw); openDashboard(); }
+        else if (result === "reset") { showReset(); }
+        else if (result === "bad") { err.textContent = "Incorrect password. Try again."; }
+        else { err.textContent = "Couldn't reach the server. Try again in a moment."; }
+      });
+
+      // First-login: save the new password Brenna chooses.
+      document.getElementById("resetForm").addEventListener("submit", async function (e) {
+        e.preventDefault();
+        var err = document.getElementById("resetErr");
+        err.textContent = "";
+        var p1 = document.getElementById("np1").value;
+        var p2 = document.getElementById("np2").value;
+        if (p1.length < 6) { err.textContent = "Use at least 6 characters."; return; }
+        if (p1 !== p2) { err.textContent = "The two passwords don't match."; return; }
+        var r;
+        try {
+          r = await fetch("/.netlify/functions/auth", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              action: "set-password",
+              password: sessionStorage.getItem(KEY) || "",
+              newPassword: p1,
+            }),
+          });
+        } catch (e) { err.textContent = "Couldn't reach the server."; return; }
+        if (!r.ok) {
+          var m = "Couldn't save. Try again.";
+          try { m = (await r.json()).error || m; } catch (e2) {}
+          err.textContent = m; return;
+        }
+        sessionStorage.setItem(KEY, p1);
+        await load(p1);
+        openDashboard();
+      });
+
+      document.getElementById("search").addEventListener("input", render);
+
+      // Change a request's status (event delegation — cards are re-rendered).
+      // setStatus saves to Baserow and re-renders on its own.
+      document.getElementById("content").addEventListener("change", function (e) {
+        var sel = e.target.closest && e.target.closest(".status-select");
+        if (!sel) return;
+        setStatus(sel.getAttribute("data-id"), sel.value);
+      });
+
+      // Filter chips.
+      document.getElementById("filters").addEventListener("click", function (e) {
+        var chip = e.target.closest && e.target.closest(".chip");
+        if (!chip) return;
+        activeFilter = chip.getAttribute("data-filter");
+        Array.prototype.forEach.call(this.querySelectorAll(".chip"), function (c) {
+          c.classList.toggle("is-active", c === chip);
+        });
+        render();
+      });
+
+      // ----- Receipts wiring -----
+      document.getElementById("tabs").addEventListener("click", function (e) {
+        var t = e.target.closest && e.target.closest(".tab");
+        if (t) switchTab(t.getAttribute("data-tab"));
+      });
+
+      document.getElementById("addReceiptBtn").addEventListener("click", function () {
+        var f = document.getElementById("receiptForm");
+        f.hidden = !f.hidden;
+        if (!f.hidden) { populateReceiptControls(); document.getElementById("rfVendor").focus(); }
+      });
+
+      document.getElementById("rfCancel").addEventListener("click", resetReceiptForm);
+      document.getElementById("receiptForm").addEventListener("submit", saveReceipt);
+      document.getElementById("exportBtn").addEventListener("click", exportExpensesCsv);
+
+      document.getElementById("rfPhoto").addEventListener("change", function () {
+        var file = this.files && this.files[0];
+        if (!file) { pendingPhoto = null; return; }
+        var reader = new FileReader();
+        reader.onload = function () {
+          pendingPhoto = { dataUrl: reader.result, name: file.name };
+          var p = document.getElementById("rfPreview");
+          p.src = reader.result; p.hidden = false;
+        };
+        reader.readAsDataURL(file);
+      });
+
+      document.getElementById("receiptFilters").addEventListener("click", function (e) {
+        var chip = e.target.closest && e.target.closest(".chip");
+        if (!chip) return;
+        receiptFilter = chip.getAttribute("data-cat");
+        Array.prototype.forEach.call(this.querySelectorAll(".chip"), function (c) {
+          c.classList.toggle("is-active", c === chip);
+        });
+        renderReceipts();
+      });
+
+      // ----- Inventory wiring -----
+      document.getElementById("addItemBtn").addEventListener("click", function () {
+        var f = document.getElementById("itemForm");
+        f.hidden = !f.hidden;
+        if (!f.hidden) { populateInventoryControls(); document.getElementById("ivName").focus(); }
+      });
+      document.getElementById("ivCancel").addEventListener("click", resetItemForm);
+      document.getElementById("itemForm").addEventListener("submit", saveItem);
+      document.getElementById("invSearch").addEventListener("input", renderInventory);
+
+      // Track-by-level vs measured toggle, and the optional colour swatch.
+      document.getElementById("ivModeToggle").addEventListener("click", function (e) {
+        var b = e.target.closest && e.target.closest(".mode-opt");
+        if (b) setItemMode(b.getAttribute("data-mode"));
+      });
+      document.getElementById("ivHasSwatch").addEventListener("change", function () {
+        document.getElementById("ivSwatch").hidden = !this.checked;
+      });
+
+      // Level buttons, "Log use", and Refill (event delegation on the list).
+      document.getElementById("inventoryContent").addEventListener("click", function (e) {
+        var lvl = e.target.closest && e.target.closest(".level-btn");
+        if (lvl) { setLevel(lvl.getAttribute("data-id"), parseFloat(lvl.getAttribute("data-frac"))); return; }
+        var refill = e.target.closest && e.target.closest('[data-act="refill"]');
+        if (refill) { refillItem(refill.getAttribute("data-id")); return; }
+        var use = e.target.closest && e.target.closest(".use-btn");
+        if (use) {
+          var id = use.getAttribute("data-id");
+          var input = document.querySelector('.use-input[data-id="' + id + '"]');
+          var amt = input ? parseFloat(input.value) : NaN;
+          if (amt > 0) { logUse(id, amt); if (input) input.value = ""; }
+          return;
+        }
+      });
+      // Enter in a "Used…" box logs it.
+      document.getElementById("inventoryContent").addEventListener("keydown", function (e) {
+        if (e.key !== "Enter") return;
+        var input = e.target.closest && e.target.closest(".use-input");
+        if (!input) return;
+        e.preventDefault();
+        var amt = parseFloat(input.value);
+        if (amt > 0) { logUse(input.getAttribute("data-id"), amt); input.value = ""; }
+      });
+
+      document.getElementById("inventoryFilters").addEventListener("click", function (e) {
+        var chip = e.target.closest && e.target.closest(".chip");
+        if (!chip) return;
+        inventoryFilter = chip.getAttribute("data-inv");
+        Array.prototype.forEach.call(this.querySelectorAll(".chip"), function (c) {
+          c.classList.toggle("is-active", c === chip);
+        });
+        renderInventory();
+      });
+
+      document.getElementById("refreshBtn").addEventListener("click", function () {
+        if (activeTab === "receipts") {
+          receiptsLoaded = false;
+          loadExpenses(sessionStorage.getItem(KEY) || "");
+        } else if (activeTab === "inventory") {
+          inventoryLoaded = false;
+          loadInventory(sessionStorage.getItem(KEY) || "");
+        } else {
+          load(sessionStorage.getItem(KEY) || "");
+        }
+      });
+
+      document.getElementById("logoutBtn").addEventListener("click", function () {
+        sessionStorage.removeItem(KEY);
+        location.reload();
+      });
+
+      // Preview mode: skip the gate, show sample data so the dashboard is visible.
+      if (PREVIEW) {
+        document.getElementById("previewBanner").hidden = false;
+        allBookings = SAMPLE_BOOKINGS;
+        openDashboard();
+        render();
+        return;
+      }
+
+      // Auto-open if we already have a key this session.
+      var saved = sessionStorage.getItem(KEY);
+      if (saved) {
+        doLogin(saved).then(function (result) {
+          if (result === "ok") { load(saved).then(function () { openDashboard(); }); }
+          else if (result === "reset") { showReset(); }
+          else { sessionStorage.removeItem(KEY); }
+        });
+      }
+    })();
+  </script>
+</body>
+</html>
