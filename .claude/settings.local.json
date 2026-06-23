@@ -1,0 +1,23 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git -c core.safecrlf=false diff -- admin.html netlify.toml README.md)",
+      "Bash(rm -f .git/index.lock)",
+      "Bash(git add *)",
+      "Bash(rm -f .git/HEAD.lock .git/index.lock)",
+      "Bash(git commit --no-verify -m ' *)",
+      "Bash(git push *)",
+      "Bash(curl -sS --max-time 20 \"https://admin.schmitzbeautyco.com/\")",
+      "Bash(curl -sS -o /dev/null -w 'auth endpoint: HTTP %{http_code}\\\\n' --max-time 20 -X POST -H 'Content-Type: application/json' -d '{}' https://admin.schmitzbeautyco.com/.netlify/functions/auth)",
+      "Bash(curl -sS -o /dev/null -w 'leads endpoint: HTTP %{http_code}\\\\n' --max-time 20 https://admin.schmitzbeautyco.com/.netlify/functions/leads)",
+      "Bash(git -c core.safecrlf=false diff -- netlify/functions/auth.js netlify/functions/leads.js)",
+      "Bash(rm -f .git/index.lock .git/HEAD.lock)",
+      "Bash(curl -sS --max-time 20 -D - -o /tmp/sub_css.txt \"https://admin.schmitzbeautyco.com/styles.css\")",
+      "Read(//tmp/**)",
+      "Bash(curl -sS --max-time 20 -D - -o /tmp/apex_css.txt \"https://schmitzbeautyco.com/styles.css\")",
+      "Bash(curl -sS --max-time 15 -o /dev/null -w \"content-type: %{content_type}\\\\n\" \"https://admin.schmitzbeautyco.com/script.js?cb=1\")",
+      "Bash(curl -sS --max-time 15 -o /dev/null -w \"HTTP %{http_code}\\\\n\" -X POST -H \"Content-Type: application/json\" -d '{}' \"https://admin.schmitzbeautyco.com/.netlify/functions/auth\")",
+      "Bash(curl -sS --max-time 15 \"https://admin.schmitzbeautyco.com/?cb=1\")"
+    ]
+  }
+}
