@@ -183,7 +183,7 @@ exports.handler = async (event) => {
 
     // ---- List all items (low ones first, then by name) ----
     const res = await fetch(
-      `${API}/database/rows/table/${SUPPLIES_TABLE}/?user_field_names=true&size=400&order_by=Item`,
+      `${API}/database/rows/table/${SUPPLIES_TABLE}/?user_field_names=true&size=200&order_by=Item`,
       { headers: auth }
     );
     if (!res.ok) {
