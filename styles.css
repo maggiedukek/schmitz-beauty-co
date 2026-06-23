@@ -56,9 +56,9 @@ img {
 }
 
 .header-inner {
-  max-width: 1340px;
+  max-width: 2200px;
   margin: 0 auto;
-  padding: 20px 22px;
+  padding: 20px clamp(16px, 3vw, 56px);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -615,7 +615,8 @@ img {
   display: grid;
   grid-template-columns: 1fr;
   gap: 32px;
-  padding: 0 22px;
+  max-width: 2200px;
+  padding: 0 clamp(16px, 3vw, 56px);
 }
 
 .footer-name {
@@ -664,8 +665,9 @@ img {
 }
 
 .footer-bar {
-  margin-top: 40px;
-  padding: 20px 22px;
+  max-width: 2200px;
+  margin: 40px auto 0;
+  padding: 20px clamp(16px, 3vw, 56px);
   border-top: 1px solid rgba(255, 255, 255, 0.07);
   text-align: center;
 }
