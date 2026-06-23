@@ -23,7 +23,7 @@
     body {
       background:
         linear-gradient(rgba(255, 255, 255, 0.62), rgba(255, 255, 255, 0.62)),
-        url("https://i.imgur.com/E5xYmC9.png") center / cover no-repeat fixed,
+        url("https://i.imgur.com/E5xYmC9.png") top center / 540px repeat,
         var(--cream);
     }
 
@@ -43,15 +43,21 @@
     .dash-head p { color: var(--muted-dark); margin-top: 4px; }
     .dash-head-actions { display: flex; gap: 10px; flex-wrap: wrap; }
     .dash-head-actions .btn { margin-top: 0; padding: 11px 18px; font-size: 13px; box-shadow: none; }
+    /* Outline/secondary buttons were see-through (the busy background showed
+       through). Make them solid white so they read cleanly. */
+    .dash-wrap .btn-secondary {
+      background: #fff; color: var(--teal-dark); border: 1.5px solid var(--teal);
+    }
+    .dash-wrap .btn-secondary:hover { background: #eafafa; }
 
-    .dash-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 14px; margin-bottom: 28px; }
+    .dash-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 12px; margin-bottom: 28px; }
     .stat-card {
       background: var(--dark-alt); border: 1px solid rgba(255,255,255,0.08);
       border-top: 3px solid var(--red);
-      border-radius: var(--radius); padding: 18px 20px;
+      border-radius: var(--radius); padding: 14px 16px; text-align: center;
     }
-    .stat-card .num { font-family: var(--serif); font-size: 32px; color: var(--teal); line-height: 1.1; }
-    .stat-card .label { color: var(--muted); font-size: 13px; text-transform: uppercase; letter-spacing: .04em; margin-top: 6px; }
+    .stat-card .num { font-family: var(--serif); font-size: 26px; color: var(--teal); line-height: 1.1; }
+    .stat-card .label { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: .04em; margin-top: 6px; }
 
     .dash-toolbar { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-bottom: 18px; }
     .dash-search {
@@ -178,29 +184,34 @@
     .expense-notes { color: #e8e8ea; font-size: 14px; white-space: pre-wrap; }
 
     /* Inventory items */
-    .inv-list { display: flex; flex-direction: column; gap: 14px; }
-    .inv-card {
+    .inv-list { display: flex; flex-direction: column; gap: 10px; }
+    .inv-row {
       background: var(--dark-alt); border: 1px solid rgba(255,255,255,0.08);
-      border-left: 4px solid #2bb673; border-radius: var(--radius); padding: 16px 18px;
+      border-left: 4px solid #2bb673; border-radius: 12px; overflow: hidden;
     }
-    .inv-card[data-low="true"] { border-left-color: var(--red); }
-    .inv-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
-    .inv-title { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-    .inv-name { font-size: 16px; font-weight: 700; color: #fff; }
+    .inv-row[data-low="true"] { border-left-color: var(--red); }
+    .inv-rowhead {
+      width: 100%; display: flex; align-items: center; gap: 12px;
+      padding: 13px 16px; background: none; border: none; cursor: pointer;
+      text-align: left; color: inherit; font: inherit;
+    }
+    .inv-dot { width: 10px; height: 10px; border-radius: 50%; background: #2bb673; flex: 0 0 auto; }
+    .inv-row[data-low="true"] .inv-dot { background: var(--red); }
     .inv-swatch { width: 14px; height: 14px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.35); flex: 0 0 auto; }
-    .inv-low-badge {
-      display: none; background: rgba(179,38,30,0.18); color: #ff8b84;
-      border: 1px solid rgba(179,38,30,0.55); border-radius: 999px; padding: 2px 10px;
-      font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em;
-    }
-    .inv-card[data-low="true"] .inv-low-badge { display: inline-block; }
-    .inv-amount { font-family: var(--serif); font-size: 20px; color: #fff; white-space: nowrap; text-align: right; }
-    .inv-amount .unit { font-family: var(--sans); font-size: 12px; color: var(--muted); margin-left: 3px; }
-    .inv-sub { color: var(--muted); font-size: 12px; margin-top: 2px; }
+    .inv-name { font-size: 15px; font-weight: 700; color: #fff; flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .inv-low-pill { color: #ff8b84; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; flex: 0 0 auto; }
+    .inv-row:not([data-low="true"]) .inv-low-pill { display: none; }
+    .inv-amount { font-family: var(--serif); font-size: 17px; color: #fff; white-space: nowrap; flex: 0 0 auto; }
+    .inv-amount .unit { font-family: var(--sans); font-size: 11px; color: var(--muted); margin-left: 2px; }
+    .chev { color: var(--muted); font-size: 13px; flex: 0 0 auto; transition: transform .15s; }
+    .inv-row.open .chev { transform: rotate(90deg); }
+    .inv-detail { padding: 0 16px 16px; }
+    .inv-sub { color: var(--muted); font-size: 12px; }
     .inv-notes { color: #cfcfd4; font-size: 13px; margin-top: 8px; white-space: pre-wrap; }
-    .inv-bar { height: 8px; background: rgba(255,255,255,0.1); border-radius: 999px; overflow: hidden; margin: 12px 0 2px; }
+    .inv-bar { height: 8px; background: rgba(255,255,255,0.1); border-radius: 999px; overflow: hidden; margin: 4px 0 2px; }
     .inv-bar > span { display: block; height: 100%; background: #2bb673; border-radius: 999px; transition: width .2s; }
-    .inv-card[data-low="true"] .inv-bar > span { background: var(--red); }
+    .inv-row[data-low="true"] .inv-bar > span { background: var(--red); }
+    .inv-allbtn { margin: 6px auto 0; display: inline-block; }
     .inv-controls { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-top: 12px; }
     .level-btn {
       background: var(--dark); border: 1px solid rgba(255,255,255,0.18); color: #fff;
@@ -496,7 +507,7 @@
         { frac: 0, label: "Empty" },
       ];
       var allSupplies = [];
-      var inventoryFilter = "all";
+      var inventoryFilter = "low"; // open on "what needs reordering", not the whole shelf
       var inventoryLoaded = false;
       var currentItemMode = "level";
 
@@ -958,11 +969,11 @@
         var filters = document.getElementById("inventoryFilters");
         if (filters && !filters.children.length) {
           var chips = [
-            { k: "all", label: "All" },
             { k: "low", label: "Low stock" },
+            { k: "all", label: "All items" },
           ].concat(INV_CATEGORIES.map(function (c) { return { k: c, label: c }; }));
           filters.innerHTML = chips.map(function (c) {
-            return '<button class="chip' + (c.k === "all" ? " is-active" : "") +
+            return '<button class="chip' + (c.k === inventoryFilter ? " is-active" : "") +
               '" data-inv="' + esc(c.k) + '">' + esc(c.label) + "</button>";
           }).join("");
         }
@@ -1016,20 +1027,24 @@
         }
       }
 
-      function supplyCardHtml(s) {
+      function supplyRowHtml(s) {
         var low = !!s.low;
         var pct = Math.max(0, Math.min(100, Number(s.percent) || 0));
-        var swatch = s.swatch ? '<span class="inv-swatch" style="background:' + esc(s.swatch) + '"></span>' : "";
-        var cat = s.category ? '<span class="cat-tag">' + esc(s.category) + "</span>" : "";
+        var swatch = s.swatch
+          ? '<span class="inv-swatch" style="background:' + esc(s.swatch) + '"></span>'
+          : '<span class="inv-dot"></span>';
 
         var amountLabel = s.mode === "amount"
           ? esc(trimNum(s.remaining)) + ' <span class="unit">/ ' + esc(trimNum(s.full)) + " " + esc(s.unit || "") + "</span>"
           : pct + '<span class="unit">%</span>';
 
+        // --- collapsed detail ---
+        var cat = s.category ? '<span class="cat-tag">' + esc(s.category) + "</span> " : "";
         var sub = [];
         if (s.brand) sub.push(esc(s.brand));
         if (s.mode === "amount" && s.alertAt > 0) sub.push("alert at " + esc(trimNum(s.alertAt)) + " " + esc(s.unit || ""));
-        var subHtml = sub.length ? '<div class="inv-sub">' + sub.join(" · ") + "</div>" : "";
+        var subHtml = (cat || sub.length)
+          ? '<div class="inv-sub">' + cat + sub.join(" · ") + "</div>" : "";
 
         var controls;
         if (s.mode === "amount") {
@@ -1045,23 +1060,33 @@
               '" data-frac="' + lv.frac + '" data-id="' + esc(s.id) + '">' + lv.label + "</button>";
           }).join("");
         }
-
         var notes = s.notes ? '<div class="inv-notes">' + esc(s.notes) + "</div>" : "";
 
-        return '<article class="inv-card" data-low="' + (low ? "true" : "false") + '" data-id="' + esc(s.id) + '">' +
-          '<div class="inv-head"><div class="inv-main">' +
-            '<div class="inv-title">' + swatch + '<span class="inv-name">' + esc(s.name || "—") + "</span>" + cat +
-            '<span class="inv-low-badge">Low</span></div>' + subHtml +
-          "</div>" +
-          '<div class="inv-amount">' + amountLabel + "</div></div>" +
-          '<div class="inv-bar"><span style="width:' + pct + '%"></span></div>' +
-          '<div class="inv-controls">' + controls + "</div>" +
-          notes +
-          "</article>";
+        return '<article class="inv-row" data-low="' + (low ? "true" : "false") + '" data-id="' + esc(s.id) + '">' +
+          '<button type="button" class="inv-rowhead">' + swatch +
+            '<span class="inv-name">' + esc(s.name || "—") + "</span>" +
+            '<span class="inv-low-pill">Low</span>' +
+            '<span class="inv-amount">' + amountLabel + "</span>" +
+            '<span class="chev">▸</span>' +
+          "</button>" +
+          '<div class="inv-detail" hidden>' + subHtml +
+            '<div class="inv-bar"><span style="width:' + pct + '%"></span></div>' +
+            '<div class="inv-controls">' + controls + "</div>" +
+            notes +
+          "</div></article>";
+      }
+
+      function syncInventoryChips() {
+        var filters = document.getElementById("inventoryFilters");
+        if (!filters) return;
+        Array.prototype.forEach.call(filters.querySelectorAll(".chip"), function (c) {
+          c.classList.toggle("is-active", c.getAttribute("data-inv") === inventoryFilter);
+        });
       }
 
       function renderInventory() {
         populateInventoryControls();
+        syncInventoryChips();
         renderInventoryStats();
         var content = document.getElementById("inventoryContent");
         if (!allSupplies.length) {
@@ -1076,10 +1101,17 @@
           return (s.name + " " + s.category + " " + s.brand + " " + s.notes).toLowerCase().indexOf(q) !== -1;
         });
         if (!list.length) {
-          content.innerHTML = '<div class="dash-state"><h3>No items match</h3></div>';
+          // On the low-stock view, an empty list is good news — celebrate it.
+          if (inventoryFilter === "low" && !q) {
+            content.innerHTML = '<div class="dash-state"><h3>You\'re all stocked up ✓</h3>' +
+              '<p>Nothing\'s running low right now.</p>' +
+              '<button type="button" class="btn inv-btn inv-allbtn" id="showAllItems">Show all items</button></div>';
+          } else {
+            content.innerHTML = '<div class="dash-state"><h3>No items match</h3></div>';
+          }
           return;
         }
-        content.innerHTML = '<div class="inv-list">' + list.map(supplyCardHtml).join("") + "</div>";
+        content.innerHTML = '<div class="inv-list">' + list.map(supplyRowHtml).join("") + "</div>";
       }
 
       // Save a change to one item: optimistic update, then sync with the server.
@@ -1371,8 +1403,21 @@
         document.getElementById("ivSwatch").hidden = !this.checked;
       });
 
-      // Level buttons, "Log use", and Refill (event delegation on the list).
+      // Expand/collapse a row, "Show all items", plus level/use/refill (delegated).
       document.getElementById("inventoryContent").addEventListener("click", function (e) {
+        var head = e.target.closest && e.target.closest(".inv-rowhead");
+        if (head) {
+          var row = head.closest(".inv-row");
+          var open = row.classList.toggle("open");
+          var detail = row.querySelector(".inv-detail");
+          if (detail) detail.hidden = !open;
+          return;
+        }
+        if (e.target.closest && e.target.closest("#showAllItems")) {
+          inventoryFilter = "all";
+          renderInventory();
+          return;
+        }
         var lvl = e.target.closest && e.target.closest(".level-btn");
         if (lvl) { setLevel(lvl.getAttribute("data-id"), parseFloat(lvl.getAttribute("data-frac"))); return; }
         var refill = e.target.closest && e.target.closest('[data-act="refill"]');
