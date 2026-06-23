@@ -140,4 +140,62 @@ exports.handler = async (event) => {
       if (!Object.keys(fields).length) return json(400, { error: "Nothing to update." });
 
       const res = await fetch(rowUrl(body.id), {
-        method: "PAT
+        method: "PATCH", headers: auth, body: JSON.stringify(fields),
+      });
+      if (!res.ok) return json(502, { error: `Could not update item (${res.status}).` });
+      return json(200, { ok: true, supply: rowToSupply(await res.json()) });
+    }
+
+    // ---- Create an item ----
+    if (event.httpMethod === "POST") {
+      let body = {};
+      try { body = JSON.parse(event.body || "{}"); } catch (e) {}
+      if (!body.name) return json(400, { error: "Give the item a name." });
+
+      const full = num(body.full);
+      const remaining = body.remaining != null ? num(body.remaining) : full;
+      const fields = {
+        Item: body.name,
+        Category: body.category || "",
+        Mode: body.mode || "level",
+        Unit: body.unit || "",
+        Full: full,
+        Remaining: remaining,
+        "Alert At": body.alertAt != null ? num(body.alertAt) : "",
+        Brand: body.brand || "",
+        Swatch: body.swatch || "",
+        Notes: body.notes || "",
+      };
+      const res = await fetch(
+        `${API}/database/rows/table/${SUPPLIES_TABLE}/?user_field_names=true`,
+        { method: "POST", headers: auth, body: JSON.stringify(fields) }
+      );
+      if (!res.ok) {
+        let m = `Could not save item (${res.status}).`;
+        try {
+          const e = await res.json();
+          if (e && e.detail) m += " " + (typeof e.detail === "string" ? e.detail : JSON.stringify(e.detail));
+        } catch (e) {}
+        return json(502, { error: m });
+      }
+      return json(200, { ok: true, supply: rowToSupply(await res.json()) });
+    }
+
+    // ---- List all items (low ones first, then by name) ----
+    const res = await fetch(
+      `${API}/database/rows/table/${SUPPLIES_TABLE}/?user_field_names=true&size=400&order_by=Item`,
+      { headers: auth }
+    );
+    if (!res.ok) {
+      return json(502, {
+        error: `Could not load inventory (${res.status}). Check BASEROW_SUPPLIES_TABLE_ID and BASEROW_TOKEN.`,
+      });
+    }
+    const data = await res.json();
+    const supplies = (data.results || []).map(rowToSupply);
+    supplies.sort((a, b) => (b.low ? 1 : 0) - (a.low ? 1 : 0));
+    return json(200, { count: supplies.length, lowCount: supplies.filter((s) => s.low).length, supplies });
+  } catch (err) {
+    return json(500, { error: "Unexpected error: " + err.message });
+  }
+};

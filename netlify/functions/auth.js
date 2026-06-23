@@ -82,4 +82,8 @@ exports.handler = async (event) => {
       }
     );
     if (!res.ok) return json(502, { error: "Could not save the new password." });
-    return json(200, { ok: true 
+    return json(200, { ok: true });
+  }
+
+  return json(400, { error: "Unknown action." });
+};

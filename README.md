@@ -130,4 +130,75 @@ files inside it:
 GitHub is where your code lives online. Netlify reads from it.
 
 1. Go to https://github.com and click **Sign up** (skip if you already have an account).
-2. Once logged in, click the **+** in t
+2. Once logged in, click the **+** in the top-right → **New repository**.
+3. Repository name: `schmitz-beauty-co`
+4. Leave it **Public** (or Private — both work), and click **Create repository**.
+
+---
+
+## Step 2 — Upload your files to GitHub
+
+On the new empty repository page:
+
+1. Click the link **"uploading an existing file"** (it's in the text on the page).
+2. Drag the **contents** of your `schmitz-beauty-co` folder into the box
+   (all the files — not the folder itself).
+3. Scroll down and click **Commit changes**.
+
+That's it — your code is now on GitHub. No software to install.
+
+---
+
+## Step 3 — Connect Netlify (this puts it online)
+
+1. Go to https://app.netlify.com and **Sign up / Log in with GitHub**.
+2. Click **Add new site** → **Import an existing project**.
+3. Choose **GitHub**, then pick your `schmitz-beauty-co` repository.
+4. Netlify reads the `netlify.toml` file automatically, so the build settings are
+   already filled in:
+   - Build command: `npx expo export --platform web`
+   - Publish directory: `dist`
+5. Click **Deploy**.
+
+Netlify will spend 1–3 minutes building. When it's done you'll get a live link like
+`https://something-random.netlify.app` — that's the link you send Brenna.
+
+> Want a nicer link? In Netlify go to **Site configuration → Change site name**
+> and set something like `schmitz-beauty-co`, giving you
+> `https://schmitz-beauty-co.netlify.app`.
+
+---
+
+## Step 4 — Updating the site as it grows
+
+Because Netlify is connected to GitHub, **any change you push to GitHub goes live
+automatically** in a couple of minutes. To update:
+
+1. In your GitHub repository, open the file you want to change (usually `App.js`).
+2. Click the pencil ✏️ icon, paste the new version, click **Commit changes**.
+3. Netlify rebuilds and the live site updates on its own. Refresh the page to see it.
+
+(When I send you updated code, you'll just replace `App.js` this way.)
+
+---
+
+## Want to preview it on your own computer first? (optional)
+
+If you ever install Node.js (https://nodejs.org), you can run it locally:
+
+```
+npm install
+npm run web
+```
+
+This is optional — Netlify builds it for you either way.
+
+---
+
+## Quick reference
+
+| Thing | Where |
+|------|-------|
+| Your code | GitHub repository `schmitz-beauty-co` |
+| The live website | Your Netlify site link |
+| The file you'll edit most | `App.js` |

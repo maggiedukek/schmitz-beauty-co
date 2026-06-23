@@ -12,3 +12,39 @@
   from = "/admin"
   to = "/admin.html"
   status = 200
+
+# --- admin.schmitzbeautyco.com ---
+# The subdomain shows the dashboard, BUT real asset/function requests must pass
+# through first — otherwise the catch-all below rewrites styles.css, script.js,
+# etc. to admin.html and the page renders unstyled. Order matters: first match wins.
+
+[[redirects]]
+  from = "https://admin.schmitzbeautyco.com/styles.css"
+  to = "/styles.css"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "https://admin.schmitzbeautyco.com/script.js"
+  to = "/script.js"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "https://admin.schmitzbeautyco.com/images/*"
+  to = "/images/:splat"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "https://admin.schmitzbeautyco.com/.netlify/*"
+  to = "/.netlify/:splat"
+  status = 200
+  force = true
+
+# Everything else on the subdomain shows the dashboard.
+[[redirects]]
+  from = "https://admin.schmitzbeautyco.com/*"
+  to = "/admin.html"
+  status = 200
+  force = true
